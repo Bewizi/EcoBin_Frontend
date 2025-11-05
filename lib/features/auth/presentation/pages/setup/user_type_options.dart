@@ -35,6 +35,8 @@ class _UserTypeOptionsState extends State<UserTypeOptions> {
     },
   ];
 
+  int? _selectedIndex;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,20 +69,32 @@ class _UserTypeOptionsState extends State<UserTypeOptions> {
                       option['title'],
                       option['subTitle'],
                       option['icon'],
+                      () {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                      },
                       context,
+                      isSelected: _selectedIndex == index,
                     );
                   },
                 ),
               ),
 
               // const SizedBox(height: 20),
-              OutlinedCustomButton(
+              CustomButton(
                 title: 'Continue',
-                bgColor: AppColors.kHoneydew,
-                textColor: AppColors.kTealDeer,
-                onTap: () {
-                  context.push(PickupLocation.routeName);
-                },
+                bgColor: _selectedIndex != null
+                    ? AppColors.kPrimary
+                    : AppColors.kHoneydew,
+                textColor: _selectedIndex != null
+                    ? AppColors.kWhite
+                    : AppColors.kTealDeer,
+                onTap: _selectedIndex != null
+                    ? () {
+                        context.push(PickupLocation.routeName);
+                      }
+                    : null,
               ),
             ],
           ),
@@ -94,43 +108,56 @@ Widget _buildUserOptions(
   String title,
   String subtitle,
   String icon,
-  BuildContext context,
-) {
-  return Container(
-    margin: EdgeInsets.only(bottom: 20),
-    padding: EdgeInsets.only(
-      left: 20,
-      right: MediaQuery.of(context).padding.right * 0.1,
-      top: 16,
-      bottom: 16,
-    ),
-    decoration: BoxDecoration(
-      color: AppColors.kAntiFlashWhite,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            SvgPicture.asset(
-              icon,
-              width: 20,
-              height: 20,
-              fit: BoxFit.scaleDown,
-            ),
-            const SizedBox(width: 12),
-            TextHeader(
-              title,
-              fontSize: 16,
-              color: AppColors.kBlack,
-              fontWeight: FontWeight.w500,
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        TextRegular(subtitle, color: AppColors.kPayneGray, fontSize: 12),
-      ],
+  VoidCallback? ontap,
+  BuildContext context, {
+  bool isSelected = false,
+}) {
+  return InkWell(
+    onTap: ontap,
+    child: Container(
+      margin: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.only(
+        left: 20,
+        right: MediaQuery.of(context).padding.right * 0.1,
+        top: 16,
+        bottom: 16,
+      ),
+      decoration: BoxDecoration(
+        color: isSelected ? AppColors.kPayneGray : AppColors.kAntiFlashWhite,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              SvgPicture.asset(
+                icon,
+                width: 20,
+                height: 20,
+                fit: BoxFit.scaleDown,
+                colorFilter: ColorFilter.mode(
+                  isSelected ? AppColors.kWhite : AppColors.kBlack,
+                  BlendMode.srcIn,
+                ),
+              ),
+              const SizedBox(width: 12),
+              TextHeader(
+                title,
+                fontSize: 16,
+                color: isSelected ? AppColors.kWhite : AppColors.kBlack,
+                fontWeight: FontWeight.w500,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          TextRegular(
+            subtitle,
+            color: isSelected ? AppColors.kWhite : AppColors.kPayneGray,
+            fontSize: 12,
+          ),
+        ],
+      ),
     ),
   );
 }
