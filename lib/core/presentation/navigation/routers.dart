@@ -1,0 +1,60 @@
+import 'package:ecobin/features/auth/presentation/pages/setup/add_profile_picture.dart';
+import 'package:ecobin/features/auth/presentation/pages/setup/pickup_location.dart';
+import 'package:ecobin/features/auth/presentation/pages/setup/user_type_options.dart';
+import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
+import 'package:ecobin/features/auth/presentation/pages/signUp/sign_up.dart';
+import 'package:ecobin/features/home_page/presentation/pages/home_screen.dart';
+import 'package:ecobin/features/splash_screens/splash_screen_logo.dart';
+import 'package:ecobin/features/splash_screens/splash_screens.dart';
+import 'package:go_router/go_router.dart';
+
+final GoRouter appRouter = GoRouter(
+  initialLocation: SplashScreenLogo.routeName,
+  routes: [
+    GoRoute(
+      path: SplashScreenLogo.routeName,
+      name: 'splashScreenLogo',
+      builder: (context, state) => const SplashScreenLogo(),
+    ),
+    GoRoute(
+      path: SplashScreens.routeName,
+      name: 'splashScreens',
+      builder: (context, state) => const SplashScreens(),
+    ),
+    GoRoute(
+      path: SignIn.routeName,
+      name: 'signIn',
+      builder: (context, state) => const SignIn(),
+    ),
+
+    GoRoute(
+      path: SignUp.routeName,
+      name: 'signUp',
+      builder: (context, state) => const SignUp(),
+    ),
+
+    GoRoute(
+      path: AddProfilePicture.routeName,
+      name: 'addProfilePicture',
+      builder: (context, state) => const AddProfilePicture(),
+    ),
+
+    GoRoute(
+      path: UserTypeOptions.routeName,
+      name: 'userTypeOptions',
+      builder: (context, state) => const UserTypeOptions(),
+    ),
+
+    GoRoute(
+      path: PickupLocation.routeName,
+      name: 'pickupLocation',
+      builder: (context, state) => const PickupLocation(),
+    ),
+
+    GoRoute(
+      path: HomeScreen.routeName,
+      name: 'homeScreen',
+      builder: (context, state) => const HomeScreen(),
+    ),
+  ],
+);
