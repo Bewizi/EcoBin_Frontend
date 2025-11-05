@@ -35,6 +35,11 @@ class CustomButton extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onTap,
             style: ElevatedButton.styleFrom(
+              overlayColor: AppColors.kTransparent,
+              disabledForegroundColor: AppColors.kTransparent,
+              foregroundColor: AppColors.kTransparent,
+              surfaceTintColor: AppColors.kTransparent,
+
               elevation: 0,
               shadowColor: AppColors.kTransparent,
               backgroundColor: bgColor ?? Theme.of(context).primaryColor,
