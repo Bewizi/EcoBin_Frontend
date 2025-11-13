@@ -63,6 +63,7 @@ class TextRegular extends StatelessWidget {
         color: color ?? defaultColor,
         fontWeight: fontWeight,
       ),
+      softWrap: true,
     );
   }
 }
