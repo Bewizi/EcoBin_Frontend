@@ -6,6 +6,7 @@ import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/auth/presentation/pages/signUp/sign_up.dart';
 import 'package:ecobin/features/home_page/presentation/pages/home_screen.dart';
 import 'package:ecobin/features/profile/presentation/pages/profile.dart';
+import 'package:ecobin/features/requests/household_details.dart';
 import 'package:ecobin/features/requests/requests.dart';
 import 'package:ecobin/features/splash_screens/splash_screen_logo.dart';
 import 'package:ecobin/features/splash_screens/splash_screens.dart';
@@ -76,6 +77,11 @@ final GoRouter appRouter = GoRouter(
       path: Profile.routeName,
       name: 'profile',
       builder: (context, state) => const Profile(),
+    ),
+    GoRoute(
+      path: HouseholdDetails.routeName,
+      name: 'householdDetails',
+      builder: (context, state) => const HouseholdDetails(),
     ),
   ],
 );
