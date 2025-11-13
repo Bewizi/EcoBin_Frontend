@@ -37,6 +37,14 @@ class PageNavigationBar extends StatelessWidget {
       indicatorColor: AppColors.kTransparent,
       selectedIndex: currentIndex,
       backgroundColor: AppColors.kWhite,
+      labelTextStyle: WidgetStateProperty.all<TextStyle?>(
+        const TextStyle(
+          color: AppColors.kBlack,
+          fontWeight: FontWeight.w500,
+          fontSize: 14,
+        ),
+      ),
+      surfaceTintColor: AppColors.kTransparent,
       destinations: [
         NavigationDestination(
           selectedIcon: SvgPicture.asset(
