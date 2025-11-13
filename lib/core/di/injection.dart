@@ -4,6 +4,10 @@ import 'package:ecobin/features/auth/data/repositories/auth_repository_impl.dart
 import 'package:ecobin/features/auth/domain/auth_repository.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/login_bloc.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/register_bloc.dart';
+import 'package:ecobin/features/profile/data/datasources/profile_remote_datasource_impl.dart';
+import 'package:ecobin/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:ecobin/features/profile/domain/repositories/profile_repository.dart';
+import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Injection {
@@ -52,5 +56,26 @@ class Injection {
 
   static RegisterBloc get registerBloc {
     return RegisterBloc(repository: authRepository);
+  }
+
+  static ProfileRepository? _profileRepository;
+
+  // Get ProfileRepository
+  static ProfileRepository get profileRepository {
+    if (_profileRepository == null) {
+      final remoteDataSource = ProfileRemoteDatasourceImpl(
+        apiClient: apiClient,
+      );
+
+      _profileRepository = ProfileRepositoryImpl(
+        remoteDatasource: remoteDataSource,
+      );
+    }
+    return _profileRepository!;
+  }
+
+  // Get ProfileBloc
+  static ProfileBloc get profileBloc {
+    return ProfileBloc(repository: profileRepository);
   }
 }
