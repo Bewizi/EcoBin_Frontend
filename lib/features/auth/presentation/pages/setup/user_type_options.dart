@@ -3,7 +3,9 @@ import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/pages/setup/pickup_location.dart';
+import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,84 +22,130 @@ class _UserTypeOptionsState extends State<UserTypeOptions> {
   final List<Map<String, dynamic>> _options = [
     {
       'title': 'Individual',
+      'value': 'individual',
       'subTitle': 'Single user managing personal waste',
+
       'icon': AppSvgs.kHouse,
     },
     {
       'title': 'Business',
+      'value': 'business',
       'subTitle': 'For offices, stores, and commercial space',
       'icon': AppSvgs.kBuildings,
     },
     {
       'title': 'Household',
+      'value': 'household',
       'subTitle': 'Family or shared living space',
       'icon': AppSvgs.kHouse,
     },
   ];
 
   int? _selectedIndex;
+  String? _selectedUserType;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextHeader(
-                'Who’s using EcoBin?',
-                fontWeight: FontWeight.w500,
-                fontSize: 20,
-                color: AppColors.kBlack,
-              ),
-              const SizedBox(height: 8),
-              TextRegular(
-                'Choose your user type so we can customize the\nwaste services and notifications for you.',
-                // fontSize: 12,
-                color: AppColors.kPayneGray,
-              ),
-              const SizedBox(height: 40),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: _options.length,
-                  itemBuilder: (context, index) {
-                    final option = _options[index];
-
-                    return _buildUserOptions(
-                      option['title'],
-                      option['subTitle'],
-                      option['icon'],
-                      () {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      },
-                      context,
-                      isSelected: _selectedIndex == index,
-                    );
-                  },
+        child: BlocConsumer<ProfileBloc, ProfileState>(
+          listener: (context, state) {
+            if (state is ProfileUpdateSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: TextRegular(
+                    'User type saved successfully!',
+                    color: AppColors.kWhite,
+                  ),
+                  backgroundColor: AppColors.kPrimary,
                 ),
-              ),
+              );
+              context.go(PickupLocation.routeName);
+            } else if (state is ProfileUpdateFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: TextRegular(state.message, color: AppColors.kWhite),
+                  backgroundColor: AppColors.kError500,
+                ),
+              );
+            }
+          },
 
-              // const SizedBox(height: 20),
-              CustomButton(
-                title: 'Continue',
-                bgColor: _selectedIndex != null
-                    ? AppColors.kPrimary
-                    : AppColors.kHoneydew,
-                textColor: _selectedIndex != null
-                    ? AppColors.kWhite
-                    : AppColors.kTealDeer,
-                onTap: _selectedIndex != null
-                    ? () {
-                        context.push(PickupLocation.routeName);
-                      }
-                    : null,
+          builder: (context, state) {
+            final isLoading = state is ProfileLodaing;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextHeader(
+                    'Who’s using EcoBin?',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                    color: AppColors.kBlack,
+                  ),
+                  const SizedBox(height: 8),
+                  TextRegular(
+                    'Choose your user type so we can customize the\nwaste services and notifications for you.',
+                    // fontSize: 12,
+                    color: AppColors.kPayneGray,
+                  ),
+                  const SizedBox(height: 40),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _options.length,
+                      itemBuilder: (context, index) {
+                        final option = _options[index];
+
+                        return _buildUserOptions(
+                          option['title'],
+                          option['subTitle'],
+                          option['icon'],
+                          () {
+                            setState(() {
+                              _selectedIndex = index;
+                              _selectedUserType = option['value'];
+                            });
+                          },
+                          context,
+                          isSelected: _selectedIndex == index,
+                        );
+                      },
+                    ),
+                  ),
+
+                  // const SizedBox(height: 20),
+                  CustomButton(
+                    title: isLoading ? 'Saving...' : 'Continue',
+                    bgColor: _selectedIndex != null
+                        ? AppColors.kPrimary
+                        : AppColors.kHoneydew,
+                    textColor: _selectedIndex != null
+                        ? AppColors.kWhite
+                        : AppColors.kTealDeer,
+                    onTap: (_selectedIndex != null && !isLoading)
+                        ? () {
+                            // ✅ Dispatch event to save to backend
+                            context.read<ProfileBloc>().add(
+                              UpdateUserTypeEvent(_selectedUserType!),
+                            );
+                          }
+                        : null,
+                    child: isLoading
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : null,
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
