@@ -42,4 +42,6 @@ class AppSvgs {
   static const String kActivity = 'assets/svgs/activity.svg';
   static const String kRequestsBin = 'assets/svgs/requests_bin.svg';
   static const String kProfile = 'assets/svgs/profile.svg';
+
+  static const String kArrowLeft = 'assets/svgs/arrow-left.svg';
 }
