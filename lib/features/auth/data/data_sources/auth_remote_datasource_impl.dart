@@ -2,7 +2,7 @@ import 'package:ecobin/core/data/config/api_config.dart';
 import 'package:ecobin/core/data/services/api_client.dart';
 import 'package:ecobin/features/auth/data/data_sources/auth_remote_datasource.dart';
 import 'package:ecobin/features/auth/data/models/login_response_model.dart';
-import 'package:ecobin/features/auth/data/models/user_model.dart';
+// import 'package:ecobin/features/auth/data/models/user_model.dart';
 
 class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   final ApiClient apiClient;
@@ -23,7 +23,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
   }
 
   @override
-  Future<UserModel> register(
+  Future<LoginResponseModel> register(
     String fullName,
     String email,
     String phoneNumber,
@@ -39,7 +39,7 @@ class AuthRemoteDatasourceImpl implements AuthRemoteDatasource {
           'password': password,
         },
       );
-      return UserModel.fromJson(response.data['user']);
+      return LoginResponseModel.fromJson(response.data);
     } catch (e) {
       rethrow;
     }

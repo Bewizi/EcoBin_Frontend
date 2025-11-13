@@ -4,16 +4,23 @@ class UserModel extends User {
   const UserModel({
     required super.id,
     required super.fullName,
-    required super.phoneNumber,
     required super.email,
+    required super.phoneNumber,
+    super.avatar,
+    super.pickupLocation,
+    super.userType,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    final profile = json['profile'] as Map<String, dynamic>?;
     return UserModel(
       id: json['id'] as String,
       fullName: json['fullName'] as String,
-      phoneNumber: json['phoneNumber'] as String,
       email: json['email'] as String,
+      phoneNumber: json['phoneNumber'] as String,
+      avatar: profile?['avatar'] as String?,
+      pickupLocation: profile?['pickupLocation'] as String?,
+      userType: profile?['userType'] as String?,
     );
   }
 
@@ -23,6 +30,9 @@ class UserModel extends User {
       'fullName': fullName,
       'email': email,
       'phoneNumber': phoneNumber,
+      'avatar': avatar!,
+      'userType': userType!,
+      'pickupLocation': pickupLocation!,
     };
   }
 
@@ -30,8 +40,11 @@ class UserModel extends User {
     return UserModel(
       id: user.id,
       fullName: user.fullName,
-      phoneNumber: user.phoneNumber,
       email: user.email,
+      phoneNumber: user.phoneNumber,
+      avatar: user.avatar!,
+      userType: user.userType!,
+      pickupLocation: user.pickupLocation!,
     );
   }
 }

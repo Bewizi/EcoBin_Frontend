@@ -67,20 +67,27 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<User> register({
-    required String email,
-    required String password,
+    String? avatar,
     required String fullName,
+    required String email,
     required String phoneNumber,
+    required String password,
+    String? userType,
+    String? pickupLocation,
   }) async {
     try {
-      final user = await remoteDatasource.register(
+      final response = await remoteDatasource.register(
         fullName,
         email,
-        password,
         phoneNumber,
+        password,
       );
 
-      return user;
+      await sharedPreferences.setString('auth_token', response.token);
+
+      apiClient.setToken(response.token);
+
+      return response.user;
     } on ServerException {
       rethrow;
     } on NetworkException {
