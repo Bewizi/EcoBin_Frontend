@@ -37,4 +37,9 @@ class AppSvgs {
   static const String kNote = 'assets/svgs/note.svg';
   static const String kCalendarEdit = 'assets/svgs/calendar_edit.svg';
   static const String kTrashIcon = 'assets/svgs/trash_icon.svg';
+
+  static const String kHomeRounded = 'assets/svgs/home_rounded.svg';
+  static const String kActivity = 'assets/svgs/activity.svg';
+  static const String kRequestsBin = 'assets/svgs/requests_bin.svg';
+  static const String kProfile = 'assets/svgs/profile.svg';
 }
