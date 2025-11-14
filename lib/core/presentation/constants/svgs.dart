@@ -44,4 +44,9 @@ class AppSvgs {
   static const String kProfile = 'assets/svgs/profile.svg';
 
   static const String kArrowLeft = 'assets/svgs/arrow-left.svg';
+  static const String kShopeefoodDriver = 'assets/svgs/shopeefood-driver.svg';
+  static const String kTissuePaper = 'assets/svgs/tissue-paper.svg';
+  static const String kDamageMap = 'assets/svgs/damage-map.svg';
+  static const String kClothesOutline = 'assets/svgs/clothes-outline.svg';
+  static const String kLucideHouse = 'assets/svgs/lucide_house.svg';
 }
