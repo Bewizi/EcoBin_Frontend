@@ -6,6 +6,8 @@ import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
+import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/requests.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,9 +21,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Map<String, String>> _pickUp = [
-    {'title': 'Request Pickup', 'icon': AppSvgs.kTrashIcon},
-    {'title': 'Schedule Pickup', 'icon': AppSvgs.kCalendarEdit},
+  final List<Map<String, dynamic>> _pickUp = [
+    {
+      'title': 'Request Pickup',
+      'icon': AppSvgs.kTrashIcon,
+      'route': Requests.routeName,
+    },
+    {
+      'title': 'Schedule Pickup',
+      'icon': AppSvgs.kCalendarEdit,
+      'route': PickupDetails.routeName,
+    },
     {'title': 'Dropoff Points', 'icon': AppSvgs.kMap},
     {'title': 'View History', 'icon': AppSvgs.kNote},
   ];
@@ -168,9 +178,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   final action = _pickUp[index];
                   return PickupAction(
-                    title: action['title']!,
-                    icon: action['icon']!,
-                    onTap: () {},
+                    title: action['title'] as String,
+                    icon: action['icon'] as String,
+                    onTap: () {
+                      final routes = action['route'];
+                      if (routes != null) {
+                        context.push(routes);
+                      }
+                    },
                   );
                 },
                 itemCount: 4,
