@@ -1,13 +1,14 @@
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_back_button.dart';
+import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
+import 'package:ecobin/features/requests/pickup_details.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class HouseholdDetails extends StatefulWidget {
   const HouseholdDetails({super.key});
   static const String routeName = '/householdDetails';
-
-  // final bool isChecked = false;
 
   @override
   State<HouseholdDetails> createState() => _HouseholdDetailsState();
@@ -15,14 +16,15 @@ class HouseholdDetails extends StatefulWidget {
 
 class _HouseholdDetailsState extends State<HouseholdDetails> {
   final List<String> reasons = [
-    'Driver didn’t move',
-    'Driver went to the wrong location',
-    'Long pick up time',
-    'Driver asked me to cancel',
-    'Accidental request',
-    'Other',
+    'Food wrappers',
+    'Used tissues or napkins',
+    'Damaged household items',
+    'Old clothes or fabrics',
+    'All kind of household waste',
   ];
   List<bool> chekedList = [];
+
+  bool get isAnyChecked => chekedList.any((isChecked) => isChecked);
 
   @override
   void initState() {
@@ -32,23 +34,14 @@ class _HouseholdDetailsState extends State<HouseholdDetails> {
   }
 
   void _handleCheckboxChange(int index, bool? value) {
-    if (value == true) {
-      setState(() {
-        for (int i = 0; i < chekedList.length; i++) {
-          chekedList[i] = false;
-        }
-
-        chekedList[index] = true;
-      });
-    } else {
-      setState(() {
-        chekedList[index] = false;
-      });
-    }
+    setState(() {
+      chekedList[index] = value ?? false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final bool buttonActive = isAnyChecked;
     return Scaffold(
       appBar: AppBar(leading: AppBackButton()),
       body: SafeArea(
@@ -78,7 +71,7 @@ class _HouseholdDetailsState extends State<HouseholdDetails> {
                       data: CheckboxThemeData(shape: CircleBorder()),
                       child: Checkbox(
                         checkColor: AppColors.kPrimary,
-
+                        side: BorderSide(color: AppColors.kSlateGray, width: 1),
                         value: chekedList[index],
                         onChanged: (bool? value) {
                           _handleCheckboxChange(index, value);
@@ -95,6 +88,29 @@ class _HouseholdDetailsState extends State<HouseholdDetails> {
                   ],
                 );
               }),
+
+              Spacer(),
+
+              Expanded(
+                child: Column(
+                  children: [
+                    CustomButton(
+                      title: 'Next',
+                      bgColor: buttonActive
+                          ? AppColors.kPrimary
+                          : AppColors.kHoneydew,
+                      textColor: buttonActive
+                          ? AppColors.kWhite
+                          : AppColors.kTealDeer,
+                      onTap: (buttonActive)
+                          ? () {
+                              context.push(PickupDetails.routeName);
+                            }
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
