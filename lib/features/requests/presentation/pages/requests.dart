@@ -42,23 +42,26 @@ class Requests extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * (360 / 640),
                 child: ListView(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kAntiFlashWhite,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: _buildPickUpType(
-                        context,
-                        'Household Waste',
-                        'Everyday non-recyclable items like\nfood wrappers, tissues, etc',
-                        AppImages.kHouseholdWaste,
+                    InkWell(
+                      onTap: () => context.push(HouseholdDetails.routeName),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.kAntiFlashWhite,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: _buildPickUpType(
+                          context,
+                          'Household Waste',
+                          'Everyday non-recyclable items like\nfood wrappers, tissues, etc',
+                          AppImages.kHouseholdWaste,
+                        ),
                       ),
                     ),
 
                     const SizedBox(height: 12),
 
                     InkWell(
-                      onTap: () => context.push(HouseholdDetails.routeName),
+                      onTap: () => (),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
