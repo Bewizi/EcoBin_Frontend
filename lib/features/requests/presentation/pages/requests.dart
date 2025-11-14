@@ -14,9 +14,7 @@ class Requests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: PageNavigationBar(
-        currentIndex: 2,
-      ), // Requests is index 2
+      bottomNavigationBar: PageNavigationBar(currentIndex: 2),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
