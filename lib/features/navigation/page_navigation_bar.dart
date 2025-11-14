@@ -3,7 +3,7 @@ import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/features/activities/activities.dart';
 import 'package:ecobin/features/home_page/presentation/pages/home_screen.dart';
 import 'package:ecobin/features/profile/presentation/pages/profile.dart';
-import 'package:ecobin/features/requests/requests.dart';
+import 'package:ecobin/features/requests/presentation/pages/requests.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
