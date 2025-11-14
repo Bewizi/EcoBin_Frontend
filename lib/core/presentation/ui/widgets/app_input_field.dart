@@ -18,6 +18,8 @@ class AppField extends StatelessWidget {
     this.showTitle = true,
     this.validator,
     this.onChanged,
+    this.readOnly = false,
+    this.onTap,
   });
 
   final String hintText;
@@ -33,6 +35,8 @@ class AppField extends StatelessWidget {
   final Widget? prefixIcons;
   final String? Function(String?)? validator;
   final ValueChanged<String>? onChanged;
+  final bool readOnly;
+  final VoidCallback? onTap;
 
   Widget _buildTextFormField(BuildContext context) {
     return TextFormField(
@@ -43,6 +47,8 @@ class AppField extends StatelessWidget {
       controller: controller,
       onChanged: onChanged,
       validator: (value) => validator?.call(value),
+      readOnly: readOnly,
+      onTap: onTap,
 
       decoration: InputDecoration(
         border: OutlineInputBorder(

@@ -41,6 +41,7 @@ class TextRegular extends StatelessWidget {
     this.color,
     this.fontWeight,
     this.textAlign,
+    this.style,
   });
 
   final String? text;
@@ -48,6 +49,7 @@ class TextRegular extends StatelessWidget {
   final Color? color;
   final FontWeight? fontWeight;
   final TextAlign? textAlign;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class TextRegular extends StatelessWidget {
         fontSize: scaledSize,
         color: color ?? defaultColor,
         fontWeight: fontWeight,
-      ),
+      ).merge(style),
       softWrap: true,
     );
   }

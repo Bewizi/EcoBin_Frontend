@@ -13,6 +13,8 @@ class CustomButton extends StatelessWidget {
     this.height,
     this.radius = 8,
     this.child,
+    this.fontWeight,
+    this.fontSize = 14,
   });
 
   final String title;
@@ -24,6 +26,8 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double radius;
   final Widget? child;
+  final FontWeight? fontWeight;
+  final double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +60,8 @@ class CustomButton extends StatelessWidget {
                   title,
                   style: TextStyle(
                     color: textColor ?? AppColors.kWhite,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
+                    fontSize: fontSize,
+                    fontWeight: fontWeight ?? FontWeight.w600,
                   ),
                 ),
           ),
