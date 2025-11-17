@@ -4,6 +4,7 @@ import 'package:ecobin/core/presentation/ui/widgets/app_back_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_input_field.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
+import 'package:ecobin/features/requests/presentation/widgets/mixins/successful_pickup_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +18,8 @@ class PickupDetails extends StatefulWidget {
   State<PickupDetails> createState() => _PickupDetailsState();
 }
 
-class _PickupDetailsState extends State<PickupDetails> {
+class _PickupDetailsState extends State<PickupDetails>
+    with SuccessfulPickupModal {
   final _formkey = GlobalKey<FormState>();
 
   final TextEditingController _pickupDate = TextEditingController();
@@ -196,7 +198,9 @@ class _PickupDetailsState extends State<PickupDetails> {
                               title: 'Confirm Pickup',
                               isDisabledBorder: false,
                               bgColor: AppColors.kPrimary,
-                              onTap: () {},
+                              onTap: () {
+                                showSuccessfulPickupModal(context);
+                              },
                               textColor: AppColors.kWhite,
                               fontWeight: FontWeight.w500,
                             ),
