@@ -27,4 +27,5 @@ class AppColors {
 
   static const Color kBrightSnow = Color(0xffF9F9F9);
   static const Color kBlueSlate = Color(0xff575E6C);
+  static const Color kAliceBlue = Color(0xffE6EAF2);
 }

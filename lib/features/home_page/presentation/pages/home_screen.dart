@@ -10,6 +10,7 @@ import 'package:ecobin/features/navigation/page_navigation_bar.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/requests.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -208,6 +209,61 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
                 itemCount: 4,
+              ),
+            ),
+
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+                child: Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: AppColors.kAliceBlue),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextHeader(
+                              'Upcoming Requests',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.kBlack,
+                            ),
+                          ],
+                        ),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: AppColors.kMintCream,
+                          ),
+                          child: Row(
+                            children: [
+                              //  icon
+                              SvgPicture.asset(
+                                AppSvgs.kInformation,
+                                width: 24,
+                                height: 24,
+                                fit: BoxFit.scaleDown,
+                              ),
+                              const SizedBox(width: 8),
+                              TextRegular(
+                                '10 block, Majek Estate, Ibafo. Lagos state Nigeria',
+                                fontSize: 12,
+                                color: AppColors.kBritishRacingGreen,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           ],
