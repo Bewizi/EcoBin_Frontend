@@ -24,4 +24,7 @@ class AppColors {
 
   // transparent colors
   static const Color kTransparent = Color(0x00000000);
+
+  static const Color kBrightSnow = Color(0xffF9F9F9);
+  static const Color kBlueSlate = Color(0xff575E6C);
 }
