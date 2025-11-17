@@ -17,7 +17,6 @@ class SchedulePickupInfo extends StatelessWidget {
         color: AppColors.kMintCream,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //  icon
           SvgPicture.asset(
