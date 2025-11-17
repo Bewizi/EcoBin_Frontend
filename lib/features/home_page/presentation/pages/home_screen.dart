@@ -5,6 +5,7 @@ import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
+import 'package:ecobin/features/home_page/presentation/widgets/schedule_pickup_info.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/requests.dart';
@@ -161,6 +162,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
+
+                    SizedBox(height: 20),
+
+                    SchedulePickupInfo(),
                   ],
                 ),
               ),
