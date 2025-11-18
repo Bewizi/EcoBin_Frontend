@@ -11,8 +11,24 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   final ProfileRepository repository;
 
   ProfileBloc({required this.repository}) : super(ProfileInitial()) {
+    on<GetUserEvent>(_getUser);
     on<UpdateUserTypeEvent>(_onUpdateUserType);
     on<UpdatePickupLocationEvent>(_onUpdatePickupLocation);
+  }
+
+  Future<void> _getUser(GetUserEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileLoading());
+
+    try {
+      final user = await repository.getProfile();
+      emit(ProfileLoaded(user));
+    } on ServerException catch (e) {
+      emit(ProfileError(e.message));
+    } on NetworkException catch (e) {
+      emit(ProfileError(e.message));
+    } catch (e) {
+      emit(ProfileError('Failed to load user'));
+    }
   }
 
   Future<void> _onUpdateUserType(
@@ -20,7 +36,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     Emitter<ProfileState> emit,
   ) async {
     print('🔵 [ProfileBLoC] Updating user type: ${event.userType}');
-    emit(ProfileLodaing());
+    emit(ProfileLoading());
 
     try {
       final user = await repository.updateUserType(event.userType);
@@ -42,7 +58,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     UpdatePickupLocationEvent event,
     Emitter<ProfileState> emit,
   ) async {
-    emit(ProfileLodaing());
+    emit(ProfileLoading());
 
     try {
       final user = await repository.updatePickupLocation(event.location);
