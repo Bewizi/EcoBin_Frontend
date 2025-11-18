@@ -26,10 +26,12 @@ class SchedulePickupInfo extends StatelessWidget {
             fit: BoxFit.scaleDown,
           ),
           const SizedBox(width: 8),
-          TextRegular(
-            'Your next pickup is scheduled for Thursday, 9 AM',
-            fontSize: 12,
-            color: AppColors.kBritishRacingGreen,
+          Expanded(
+            child: TextRegular(
+              'Your next pickup is scheduled for Thursday, 9 AM',
+              fontSize: 12,
+              color: AppColors.kBritishRacingGreen,
+            ),
           ),
         ],
       ),
