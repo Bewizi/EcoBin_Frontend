@@ -72,7 +72,7 @@ class _UserTypeOptionsState extends State<UserTypeOptions> {
           },
 
           builder: (context, state) {
-            final isLoading = state is ProfileLodaing;
+            final isLoading = state is ProfileLoading;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
               child: Column(
