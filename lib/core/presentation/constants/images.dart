@@ -7,4 +7,5 @@ class AppImages {
   static const String kOrganicWaste = 'assets/images/organic_waste.png';
   static const String kElectronicWaste = 'assets/images/electronic_waste.png';
   static const String kMedicalWaste = 'assets/images/medical_waste.png';
+  static const String kRecycling = 'assets/images/recycling.png';
 }

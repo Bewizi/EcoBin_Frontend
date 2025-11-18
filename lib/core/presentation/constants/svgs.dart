@@ -7,7 +7,7 @@ class AppSvgs {
   static const String passwordIcon = 'assets/svgs/password_icon.svg';
   static const String kUserIcon = 'assets/svgs/user.svg';
   static const String phoneIcon = 'assets/svgs/phone_icon.svg';
-  static const String locationIcon = 'assets/svgs/location_icon.svg';
+  static const String kLocationIcon = 'assets/svgs/location_icon.svg';
   static const String calendarIcon = 'assets/svgs/calendar_icon.svg';
   static const String logoutIcon = 'assets/svgs/logout_icon.svg';
   static const String settingsIcon = 'assets/svgs/settings_icon.svg';
