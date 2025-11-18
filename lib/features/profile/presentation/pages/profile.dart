@@ -1,11 +1,14 @@
+import 'package:ecobin/core/di/injection.dart';
 import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
+import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -209,6 +212,80 @@ class _ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
+
+                    SizedBox(height: 20),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildBox(
+                          AppSvgs.kSettingLineLight,
+                          'App Settings',
+                          AppSvgs.kArrowOutlined,
+                        ),
+                        SizedBox(height: 20),
+                        _buildBox(
+                          AppSvgs.kHelpSupport,
+                          'Help & Support',
+                          AppSvgs.kArrowOutlined,
+                        ),
+                        SizedBox(height: 20),
+                        _buildBox(
+                          AppSvgs.kProiconsNote,
+                          'Terms & Privacy',
+                          AppSvgs.kArrowOutlined,
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextRegular(
+                              'Logout',
+                              color: AppColors.kBlack,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.logout, color: AppColors.kError),
+                              onPressed: () async {
+                                try {
+                                  // Show loading dialog
+                                  showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) => const Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  );
+
+                                  // Perform logout
+                                  await Injection.authRepository.logout();
+
+                                  // Navigate to login screen and clear the stack
+                                  if (context.mounted) {
+                                    context.go(SignIn.routeName);
+                                  }
+                                } catch (e) {
+                                  // Close loading dialog
+                                  if (context.mounted) {
+                                    Navigator.pop(context);
+
+                                    // Show error snackbar
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Logout failed: \$e'),
+                                        backgroundColor: AppColors.kError,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -218,4 +295,41 @@ class _ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+Widget _buildBox(String icon, String title, String arrowIcon) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Expanded(
+        flex: 6,
+        child: Row(
+          children: [
+            SvgPicture.asset(
+              icon,
+              width: 24,
+              height: 24,
+              fit: BoxFit.scaleDown,
+            ),
+            SizedBox(width: 8),
+            TextRegular(
+              title,
+              color: AppColors.kBlack,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ],
+        ),
+      ),
+      Expanded(
+        child: SvgPicture.asset(
+          arrowIcon,
+          width: 24,
+          height: 24,
+          fit: BoxFit.scaleDown,
+        ),
+      ),
+    ],
+  );
 }

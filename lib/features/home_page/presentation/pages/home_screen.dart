@@ -1,10 +1,8 @@
-import 'package:ecobin/core/di/injection.dart';
 import 'package:ecobin/core/presentation/constants/images.dart';
 import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
-import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/schedule_pickup_info.dart';
@@ -99,42 +97,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 40,
                           fit: BoxFit.cover,
                         ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.logout, color: AppColors.kError),
-                        onPressed: () async {
-                          try {
-                            // Show loading dialog
-                            showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (context) => const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-
-                            // Perform logout
-                            await Injection.authRepository.logout();
-
-                            // Navigate to login screen and clear the stack
-                            if (context.mounted) {
-                              context.go(SignIn.routeName);
-                            }
-                          } catch (e) {
-                            // Close loading dialog
-                            if (context.mounted) {
-                              Navigator.pop(context);
-
-                              // Show error snackbar
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Logout failed: \$e'),
-                                  backgroundColor: AppColors.kError,
-                                ),
-                              );
-                            }
-                          }
-                        },
                       ),
                     ],
                   ),

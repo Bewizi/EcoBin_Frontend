@@ -49,4 +49,9 @@ class AppSvgs {
   static const String kDamageMap = 'assets/svgs/damage-map.svg';
   static const String kClothesOutline = 'assets/svgs/clothes-outline.svg';
   static const String kLucideHouse = 'assets/svgs/lucide_house.svg';
+
+  static const String kSettingLineLight = 'assets/svgs/setting-line-light.svg';
+  static const String kHelpSupport = 'assets/svgs/help-support.svg';
+  static const String kArrowOutlined = 'assets/svgs/arrow-outlined.svg';
+  static const String kProiconsNote = 'assets/svgs/proicons_note.svg';
 }
