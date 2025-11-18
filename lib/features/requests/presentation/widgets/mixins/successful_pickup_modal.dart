@@ -71,12 +71,12 @@ mixin SuccessfulPickupModal {
                           children: [
                             _buildPickupData(
                               'Address',
-                              '03, Adekunmi Estate,\nOjota, Lagos',
+                              '03, Adekunmi Estate, Ojota, Lagos',
                             ),
                             SizedBox(height: 20),
                             _buildPickupData(
                               'Date & Time',
-                              '10th of May, 2025.\n12PM',
+                              '10th of May, 2025. 12PM',
                             ),
                             SizedBox(height: 20),
                             _buildPickupData('Waste Type', ' Household Waste'),
@@ -118,11 +118,14 @@ Widget _buildPickupData(String text, String dataText) {
         color: AppColors.kBlueSlate,
         fontWeight: FontWeight.w500,
       ),
-      TextRegular(
-        dataText,
-        color: AppColors.kBlack,
-        fontWeight: FontWeight.w500,
-        textAlign: TextAlign.end,
+
+      Expanded(
+        child: TextRegular(
+          dataText,
+          color: AppColors.kBlack,
+          fontWeight: FontWeight.w500,
+          textAlign: TextAlign.end,
+        ),
       ),
     ],
   );
