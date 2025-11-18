@@ -1,6 +1,8 @@
 import 'package:ecobin/core/di/injection.dart';
+import 'package:ecobin/core/presentation/constants/images.dart';
 import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
+import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
@@ -215,53 +217,146 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                child: Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: AppColors.kAliceBlue),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextHeader(
-                              'Upcoming Requests',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.kBlack,
-                            ),
-                          ],
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: AppColors.kMintCream,
+                child: Container(
+                  padding: EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: AppColors.kAliceBlue),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      // Upcoming request and type
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          TextHeader(
+                            'Upcoming Requests',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.kBlack,
                           ),
-                          child: Row(
+
+                          Row(
                             children: [
-                              //  icon
-                              SvgPicture.asset(
-                                AppSvgs.kInformation,
-                                width: 24,
-                                height: 24,
-                                fit: BoxFit.scaleDown,
-                              ),
-                              const SizedBox(width: 8),
                               TextRegular(
+                                'Type:',
+                                color: AppColors.kSlateGray,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              SizedBox(width: 8),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 4,
+                                  horizontal: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.kLimeGreen,
+                                  borderRadius: BorderRadius.circular(100),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      AppImages.kRecycling,
+                                      width: 16,
+                                      height: 16,
+                                    ),
+                                    SizedBox(width: 8),
+                                    TextRegular(
+                                      'Recycle',
+                                      fontSize: 12,
+                                      color: AppColors.kBlack,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Date and time
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.calendar_month_outlined,
+                                size: 16,
+                                color: AppColors.kBlueSlate,
+                              ),
+                              SizedBox(width: 8),
+                              TextRegular(
+                                'Thursday, 8th May 2025',
+                                color: AppColors.kBlueSlate,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.access_time,
+                                size: 16,
+                                color: AppColors.kBlueSlate,
+                              ),
+                              SizedBox(width: 8),
+                              TextRegular(
+                                '12PM',
+                                color: AppColors.kBlueSlate,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Location
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: AppColors.kMintCream,
+                        ),
+                        child: Row(
+                          children: [
+                            //  icon
+                            SvgPicture.asset(
+                              AppSvgs.kLocationIcon,
+                              width: 24,
+                              height: 24,
+                              fit: BoxFit.scaleDown,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: TextRegular(
                                 '10 block, Majek Estate, Ibafo. Lagos state Nigeria',
                                 fontSize: 12,
                                 color: AppColors.kBritishRacingGreen,
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+
+                      const SizedBox(height: 20),
+
+                      CustomButton(
+                        title: 'View Details',
+                        bgColor: AppColors.kPrimary,
+                        textColor: AppColors.kWhite,
+                        onTap: () {
+                          context.go(HomeScreen.routeName);
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
