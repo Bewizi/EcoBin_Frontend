@@ -4,6 +4,7 @@ import 'package:ecobin/core/presentation/navigation/routers.dart';
 import 'package:ecobin/core/presentation/themes/themes_data.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/register_bloc.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -39,6 +40,7 @@ class MyApp extends StatelessWidget {
               create: (context) =>
                   ProfileBloc(repository: Injection.profileRepository),
             ),
+            BlocProvider(create: (context)=>PickupBloc(repository: Injection.pickupRepository))
           ],
           child: MaterialApp.router(
             locale: DevicePreview.locale(context),
