@@ -8,7 +8,7 @@ abstract class PickupRemoteDatasource {
     required String pickupTime,
   });
 
-  Future<PickupModel> getPickup();
+  Future<List<PickupModel>> getPickup();
 
   Future<PickupModel> getPickupById(String id);
 

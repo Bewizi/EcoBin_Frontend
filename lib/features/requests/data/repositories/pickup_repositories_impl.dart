@@ -9,7 +9,7 @@ class PickUpRepositoriesImpl implements PickupRepository {
   PickUpRepositoriesImpl({required this.remoteDatasource});
 
   @override
-  Future<Pickup> getPickup() async {
+  Future<List<Pickup>> getPickup() async {
     try {
       final pickup = await remoteDatasource.getPickup();
       return pickup;

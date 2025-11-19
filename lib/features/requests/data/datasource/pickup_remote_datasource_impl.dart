@@ -38,10 +38,13 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
   }
 
   @override
-  Future<PickupModel> getPickup() async {
+  Future<List<PickupModel>> getPickup() async {
     try {
       final response = await apiClient.get('/pickups');
-      return PickupModel.fromJson(response.data);
+
+      final List<dynamic> data = response.data['pickups'];
+
+      return data.map((json) => PickupModel.fromJson(json)).toList();
     } catch (e) {
       rethrow;
     }
