@@ -8,7 +8,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 mixin SuccessfulPickupModal {
-  void showSuccessfulPickupModal(BuildContext context) {
+  void showSuccessfulPickupModal(
+    BuildContext context, {
+    required String address,
+    required String date,
+    required String time,
+    required String wasteType,
+    String? note,
+  }) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -69,21 +76,15 @@ mixin SuccessfulPickupModal {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            _buildPickupData(
-                              'Address',
-                              '03, Adekunmi Estate, Ojota, Lagos',
-                            ),
+                            _buildPickupData('Address', address),
                             SizedBox(height: 20),
-                            _buildPickupData(
-                              'Date & Time',
-                              '10th of May, 2025. 12PM',
-                            ),
+                            _buildPickupData('Date & Time', '$date . $time'),
                             SizedBox(height: 20),
-                            _buildPickupData('Waste Type', ' Household Waste'),
+                            _buildPickupData('Waste Type', wasteType),
                             SizedBox(height: 20),
                             _buildPickupData(
                               'Note',
-                              'Bins are behind the gate',
+                              note ?? 'No additional note',
                             ),
                           ],
                         ),
