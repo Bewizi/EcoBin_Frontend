@@ -8,6 +8,10 @@ import 'package:ecobin/features/profile/data/datasources/profile_remote_datasour
 import 'package:ecobin/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:ecobin/features/profile/domain/repositories/profile_repository.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:ecobin/features/requests/data/datasource/pickup_remote_datasource_impl.dart';
+import 'package:ecobin/features/requests/data/repositories/pickup_repositories_impl.dart';
+import 'package:ecobin/features/requests/domain/repository/pickup_repository.dart';
+import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Injection {
@@ -77,5 +81,22 @@ class Injection {
   // Get ProfileBloc
   static ProfileBloc get profileBloc {
     return ProfileBloc(repository: profileRepository);
+  }
+
+  static PickupRepository? _pickupRepository;
+
+  static PickupRepository get pickupRepository {
+    if (_pickupRepository == null) {
+      final remoteDataSource = PickupRemoteDataSourceImpl(apiClient: apiClient);
+
+      _pickupRepository = PickUpRepositoriesImpl(
+        remoteDatasource: remoteDataSource,
+      );
+    }
+    return _pickupRepository!;
+  }
+
+  static PickupBloc get pickupBloc {
+    return PickupBloc(repository: pickupRepository);
   }
 }
