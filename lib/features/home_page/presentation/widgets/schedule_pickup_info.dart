@@ -5,7 +5,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SchedulePickupInfo extends StatelessWidget {
-  const SchedulePickupInfo({super.key});
+  final String date;
+  final String time;
+  
+  const SchedulePickupInfo({
+    super.key,
+    required this.date,
+    required this.time,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +35,7 @@ class SchedulePickupInfo extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: TextRegular(
-              'Your next pickup is scheduled for Thursday, 9 AM',
+              'Your next pickup is scheduled for $date, $time',
               fontSize: 12,
               color: AppColors.kBritishRacingGreen,
             ),

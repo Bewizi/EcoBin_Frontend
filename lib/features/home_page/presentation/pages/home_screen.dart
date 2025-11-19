@@ -153,7 +153,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     SizedBox(height: 20),
 
-                    SchedulePickupInfo(),
+                    BlocBuilder<PickupBloc, PickupState>(
+                      builder: (context, state) {
+                        if (state is PickupLoaded && state.pickups.isNotEmpty) {
+                          final latestPickup = state.pickups.first;
+                          return SchedulePickupInfo(
+                            date: latestPickup.pickupDate ?? 'N/A',
+                            time: latestPickup.pickupTime ?? 'N/A',
+                          );
+                        }
+                        return SizedBox.shrink();
+                      },
+                    ),
                   ],
                 ),
               ),

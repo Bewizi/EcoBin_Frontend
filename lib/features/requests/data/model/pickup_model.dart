@@ -15,8 +15,8 @@ class PickupModel extends Pickup {
       id: json['id'] as String,
       userId: (json['userId'] ?? json['user_id']) as String?,
       address: json['address'] as String?,
-      pickupDate: json['pickupDate'] as String?,
-      pickupTime: json['pickupTime'] as String?,
+      pickupDate: json['pickupDate'] as String,
+      pickupTime: json['pickupTime'] as String,
       additionalNote: json['additionalNote'] as String?,
     );
   }
