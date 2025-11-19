@@ -7,9 +7,12 @@ import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/schedule_pickup_info.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
+import 'package:ecobin/features/requests/domain/pickup.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/requests.dart';
+import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -52,6 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return 'Good Evening';
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<PickupBloc>().add(const GetPickupEvent());
   }
 
   @override
@@ -185,140 +194,174 @@ class _HomeScreenState extends State<HomeScreen> {
                     border: Border.all(width: 1, color: AppColors.kAliceBlue),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: Column(
-                    children: [
-                      // Upcoming request and type
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          TextHeader(
-                            'Upcoming Requests',
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.kBlack,
+                  child: BlocConsumer<PickupBloc, PickupState>(
+                    listener: (context, state) {
+                      if (state is PickupError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: TextRegular(
+                              state.message,
+                              fontSize: 16,
+                              color: AppColors.kWhite,
+                            ),
+                            backgroundColor: AppColors.kError500,
                           ),
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      final isLoading = state is PickupLoading;
+                      if (isLoading) {
+                        return Center(child: CircularProgressIndicator());
+                      }
 
+                      Pickup? latestPickup;
+                      if (state is PickupLoaded && state.pickups.isNotEmpty) {
+                        latestPickup = state.pickups.first;
+                      }
+
+                      if (latestPickup == null && state is PickupLoaded) {
+                        return Center(
+                          child: TextRegular('No upcoming pickups'),
+                        );
+                      }
+
+                      return Column(
+                        children: [
+                          // Upcoming request and type
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              TextRegular(
-                                'Type:',
-                                color: AppColors.kSlateGray,
+                              TextHeader(
+                                'Upcoming Requests',
+                                fontSize: 16,
                                 fontWeight: FontWeight.w500,
+                                color: AppColors.kBlack,
                               ),
-                              SizedBox(width: 8),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 4,
-                                  horizontal: 6,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.kLimeGreen,
-                                  borderRadius: BorderRadius.circular(100),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      AppImages.kRecycling,
-                                      width: 16,
-                                      height: 16,
+
+                              Row(
+                                children: [
+                                  TextRegular(
+                                    'Type:',
+                                    color: AppColors.kSlateGray,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 4,
+                                      horizontal: 6,
                                     ),
-                                    SizedBox(width: 8),
-                                    TextRegular(
-                                      'Recycle',
-                                      fontSize: 12,
-                                      color: AppColors.kBlack,
-                                      fontWeight: FontWeight.w500,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kLimeGreen,
+                                      borderRadius: BorderRadius.circular(100),
                                     ),
-                                  ],
-                                ),
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          AppImages.kRecycling,
+                                          width: 16,
+                                          height: 16,
+                                        ),
+                                        SizedBox(width: 8),
+                                        TextRegular(
+                                          'Recycle',
+                                          fontSize: 12,
+                                          color: AppColors.kBlack,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // Date and time
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month_outlined,
+                                    size: 16,
+                                    color: AppColors.kBlueSlate,
+                                  ),
+                                  SizedBox(width: 8),
+                                  TextRegular(
+                                    latestPickup?.pickupDate ?? 'N/A',
+                                    color: AppColors.kBlueSlate,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Icon(
+                                    Icons.access_time,
+                                    size: 16,
+                                    color: AppColors.kBlueSlate,
+                                  ),
+                                  SizedBox(width: 8),
+                                  TextRegular(
+                                    latestPickup?.pickupTime,
+                                    color: AppColors.kBlueSlate,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Location
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColors.kMintCream,
+                            ),
+                            child: Row(
+                              children: [
+                                //  icon
+                                SvgPicture.asset(
+                                  AppSvgs.kLocationIcon,
+                                  width: 24,
+                                  height: 24,
+                                  fit: BoxFit.scaleDown,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: TextRegular(
+                                    latestPickup?.address,
+                                    fontSize: 12,
+                                    color: AppColors.kBritishRacingGreen,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          CustomButton(
+                            title: 'View Details',
+                            bgColor: AppColors.kPrimary,
+                            textColor: AppColors.kWhite,
+                            onTap: () {
+                              context.go(HomeScreen.routeName);
+                            },
                           ),
                         ],
-                      ),
-
-                      const SizedBox(height: 16),
-
-                      // Date and time
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.calendar_month_outlined,
-                                size: 16,
-                                color: AppColors.kBlueSlate,
-                              ),
-                              SizedBox(width: 8),
-                              TextRegular(
-                                'Thursday, 8th May 2025',
-                                color: AppColors.kBlueSlate,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.access_time,
-                                size: 16,
-                                color: AppColors.kBlueSlate,
-                              ),
-                              SizedBox(width: 8),
-                              TextRegular(
-                                '12PM',
-                                color: AppColors.kBlueSlate,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Location
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: AppColors.kMintCream,
-                        ),
-                        child: Row(
-                          children: [
-                            //  icon
-                            SvgPicture.asset(
-                              AppSvgs.kLocationIcon,
-                              width: 24,
-                              height: 24,
-                              fit: BoxFit.scaleDown,
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: TextRegular(
-                                '10 block, Majek Estate, Ibafo. Lagos state Nigeria',
-                                fontSize: 12,
-                                color: AppColors.kBritishRacingGreen,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      CustomButton(
-                        title: 'View Details',
-                        bgColor: AppColors.kPrimary,
-                        textColor: AppColors.kWhite,
-                        onTap: () {
-                          context.go(HomeScreen.routeName);
-                        },
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ),
