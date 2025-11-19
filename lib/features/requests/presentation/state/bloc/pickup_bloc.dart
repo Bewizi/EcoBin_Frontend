@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:ecobin/core/data/error/exception.dart';
+import 'package:ecobin/features/requests/domain/pickup.dart';
 import 'package:ecobin/features/requests/domain/repository/pickup_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -22,8 +23,8 @@ class PickupBloc extends Bloc<PickupEvent, PickupState> {
   ) async {
     emit(PickupLoading());
     try {
-      await repository.getPickup();
-      emit(PickupLoaded());
+      final pickup = await repository.getPickup();
+      emit(PickupLoaded(pickup));
     } on ServerException catch (e) {
       emit(PickupError(e.message));
     } on NetworkException catch (e) {
@@ -46,7 +47,9 @@ class PickupBloc extends Bloc<PickupEvent, PickupState> {
         pickupDate: event.pickupDate,
         pickupTime: event.pickupTime,
       );
-      emit(PickupLoaded());
+      final pickup = await repository.getPickup();
+      // add(GetPickupEvent());
+      emit(PickupLoaded(pickup));
     } on ServerException catch (e) {
       emit(PickupError(e.message));
     } catch (e) {
@@ -62,7 +65,7 @@ class PickupBloc extends Bloc<PickupEvent, PickupState> {
     emit(PickupLoading());
     try {
       await repository.getPickupById(event.id);
-      emit(PickupLoaded());
+      emit(PickupLoaded([]));
     } catch (e) {
       emit(PickupError('Failed to load pickup'));
       rethrow;
