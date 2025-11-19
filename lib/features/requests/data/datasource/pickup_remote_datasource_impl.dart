@@ -34,7 +34,6 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
 
   @override
   Future<PickupModel> deletePickup(String id) {
-    // TODO: implement deletePickup
     throw UnimplementedError();
   }
 
@@ -66,7 +65,6 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
     required String pickupDate,
     required String pickupTime,
   }) {
-    // TODO: implement updatePickup
     throw UnimplementedError();
   }
 }
