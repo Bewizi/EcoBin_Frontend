@@ -1,10 +1,11 @@
-import 'package:ecobin/features/auth/data/models/user_model.dart';
+import 'package:ecobin/features/profile/domain/profile.dart';
 
 abstract class ProfileRemoteDatasource {
-  Future<UserModel> updateProfile({
+  Future<Profile> createUserSetup({
+    String? fullName,
     String? userType,
     String? pickupLocation,
     String? avatar,
   });
-  Future<UserModel> getProfile();
+  Future<Profile> getProfile();
 }

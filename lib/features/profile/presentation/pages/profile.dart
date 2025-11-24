@@ -74,37 +74,43 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           SizedBox(width: 20),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // User FullName
-                              TextHeader(
-                                (state is ProfileLoaded)
-                                    ? state.user.fullName
-                                    : "Placeholder Name",
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.kBlack,
-                              ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // User FullName
+                                TextHeader(
+                                  (state is ProfileLoaded)
+                                      ? state.user.fullName
+                                      : "Placeholder Name",
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.kBlack,
+                                ),
 
-                              SizedBox(height: 12),
-                              // location
-                              Row(
-                                children: [
-                                  SvgPicture.asset(
-                                    AppSvgs.kLocationIcon,
-                                    width: 20,
-                                    height: 20,
-                                    fit: BoxFit.scaleDown,
-                                  ),
-                                  SizedBox(width: 8),
-                                  TextRegular(
-                                    'Ibadan, Nigeria',
-                                    color: AppColors.kBlack,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ],
-                              ),
-                            ],
+                                SizedBox(height: 12),
+                                // location
+                                Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      AppSvgs.kLocationIcon,
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: TextRegular(
+                                        (state is ProfileLoaded)
+                                            ? state.user.pickupLocation
+                                            : 'Ibadan, Nigeria',
+                                        color: AppColors.kBlack,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -243,7 +249,10 @@ class _ProfileState extends State<Profile> {
                                 fontWeight: FontWeight.w500,
                               ),
                               IconButton(
-                                icon: Icon(Icons.logout, color: AppColors.kError),
+                                icon: Icon(
+                                  Icons.logout,
+                                  color: AppColors.kError,
+                                ),
                                 onPressed: () async {
                                   try {
                                     // Show loading dialog
@@ -268,7 +277,9 @@ class _ProfileState extends State<Profile> {
                                       Navigator.pop(context);
 
                                       // Show error snackbar
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
                                         SnackBar(
                                           content: Text('Logout failed: \$e'),
                                           backgroundColor: AppColors.kError,

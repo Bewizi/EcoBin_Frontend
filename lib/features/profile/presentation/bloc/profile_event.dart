@@ -31,3 +31,12 @@ class UpdatePickupLocationEvent extends ProfileEvent {
   @override
   List<Object> get props => [location];
 }
+
+class CreateProfileEvent extends ProfileEvent {
+  final Profile profile;
+
+  const CreateProfileEvent(this.profile);
+
+  @override
+  List<Object> get props => [profile];
+}

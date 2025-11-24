@@ -1,6 +1,6 @@
 import 'package:ecobin/core/data/services/api_client.dart';
-import 'package:ecobin/features/auth/data/models/user_model.dart';
 import 'package:ecobin/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:ecobin/features/profile/data/model/profile_model.dart';
 
 class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   final ApiClient apiClient;
@@ -8,25 +8,27 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   ProfileRemoteDatasourceImpl({required this.apiClient});
 
   @override
-  Future<UserModel> updateProfile({
+  Future<ProfileModel> createUserSetup({
+    String? avatar,
+    String? fullName,
     String? userType,
     String? pickupLocation,
-    String? avatar,
   }) async {
     try {
       print('🔵 [ProfileDataSource] Updating profile...');
 
       final Map<String, dynamic> data = {};
 
+      if (avatar != null) data['avatar'] = avatar;
       if (userType != null) data['userType'] = userType;
       if (pickupLocation != null) data['pickupLocation'] = pickupLocation;
-      if (avatar != null) data['avatar'] = avatar;
+      if (fullName != null) data['fullName'] = fullName;
 
       print('🟢 [ProfileDataSource] Profile updated successfully');
 
-      final response = await apiClient.put('/profile', data: data);
+      final response = await apiClient.post('/profile', data: data);
 
-      return UserModel.fromJson(response.data['user']);
+      return ProfileModel.fromJson(response.data['user']);
     } catch (e) {
       print('🔴 [ProfileDataSource] Update failed: $e');
       rethrow;
@@ -34,10 +36,10 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   }
 
   @override
-  Future<UserModel> getProfile() async {
+  Future<ProfileModel> getProfile() async {
     try {
       final response = await apiClient.get('/profile');
-      return UserModel.fromJson(response.data['user']);
+      return ProfileModel.fromJson(response.data['user']);
     } catch (e) {
       rethrow;
     }

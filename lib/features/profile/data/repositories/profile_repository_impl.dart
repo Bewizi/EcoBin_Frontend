@@ -1,6 +1,6 @@
 import 'package:ecobin/core/data/error/exception.dart';
-import 'package:ecobin/features/auth/domain/user.dart';
 import 'package:ecobin/features/profile/data/datasources/profile_remote_datasource.dart';
+import 'package:ecobin/features/profile/domain/profile.dart';
 import 'package:ecobin/features/profile/domain/repositories/profile_repository.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
@@ -9,50 +9,29 @@ class ProfileRepositoryImpl implements ProfileRepository {
   ProfileRepositoryImpl({required this.remoteDatasource});
 
   @override
-  Future<User> updateUserType(String userType) async {
+  Future<Profile> createUserSetup({
+    String? userId,
+    String? fullName,
+    String? avatar,
+    String? userType,
+    String? pickupLocation,
+  }) async {
     try {
-      print('🔵 [ProfileRepository] Updating user type: $userType');
-      final user = await remoteDatasource.updateProfile(userType: userType);
-      print('🟢 [ProfileRepository] User type updated');
-
-      return user;
-    } on ServerException {
-      rethrow;
-    } on NetworkException {
-      rethrow;
-    } catch (e) {
-      throw ServerException('Failed to update user type: $e');
-    }
-  }
-
-  @override
-  Future<User> updatePickupLocation(String location) async {
-    try {
-      print('🔵 [ProfileRepository] Updating user type: $location');
-      final user = await remoteDatasource.updateProfile(
-        pickupLocation: location,
+      final profile = await remoteDatasource.createUserSetup(
+        fullName: fullName,
+        userType: userType,
+        pickupLocation: pickupLocation,
+        avatar: avatar,
       );
 
-      return user;
+      return profile;
     } catch (e) {
-      throw ServerException('Failed to update pickup location:  $e');
+      throw ServerException('Failed to create user setup:  $e');
     }
   }
 
   @override
-  Future<User> updateAvatar(String avatar) async {
-    try {
-      print('🔵 [ProfileRepository] Updating user type: $avatar');
-      final user = await remoteDatasource.updateProfile(avatar: avatar);
-
-      return user;
-    } catch (e) {
-      throw ServerException('Failed to update avatar:  $e');
-    }
-  }
-
-  @override
-  Future<User> getProfile() async {
+  Future<Profile> getProfile() async {
     try {
       final user = await remoteDatasource.getProfile();
 

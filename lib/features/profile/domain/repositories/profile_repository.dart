@@ -1,8 +1,13 @@
-import 'package:ecobin/features/auth/domain/user.dart';
+import 'package:ecobin/features/profile/domain/profile.dart';
 
 abstract class ProfileRepository {
-  Future<User> updateUserType(String userType);
-  Future<User> updatePickupLocation(String pickupLocation);
-  Future<User> updateAvatar(String avatar);
-  Future<User> getProfile();
+  Future<Profile> createUserSetup({
+    String? userId,
+    String? fullName,
+    String? avatar,
+    String? userType,
+    String? pickupLocation,
+  });
+
+  Future<Profile> getProfile();
 }
