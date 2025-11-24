@@ -5,6 +5,7 @@ import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -189,11 +190,33 @@ class _ProfileState extends State<Profile> {
                                             color: AppColors.kBlueSlate,
                                           ),
                                           SizedBox(width: 8),
-                                          TextRegular(
-                                            '9 AM - Thursays',
-                                            color: AppColors.kBlack,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
+                                          BlocConsumer<PickupBloc, PickupState>(
+                                            listener: (context, state) {
+                                              if (state is PickupError) {
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text(
+                                                      state.message,
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                            builder: (context, state) {
+                                              return TextRegular(
+                                                (state is PickupLoaded)
+                                                    ? state
+                                                          .pickups[0]
+                                                          .pickupTime
+                                                    : '9 AM - Thursays',
+
+                                                color: AppColors.kBlack,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                              );
+                                            },
                                           ),
                                         ],
                                       ),
