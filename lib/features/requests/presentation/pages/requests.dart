@@ -2,7 +2,11 @@ import 'package:ecobin/core/presentation/constants/images.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
+import 'package:ecobin/features/requests/presentation/pages/electronic_waste%20_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/household_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/medical_waste%20_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/organic_waste%20_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/recyclables_details.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -59,7 +63,7 @@ class Requests extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     InkWell(
-                      onTap: () => (),
+                      onTap: () => context.push(RecyclablesDetails.routeName),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
@@ -77,48 +81,58 @@ class Requests extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     // Organic Waste
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kAntiFlashWhite,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: _buildPickUpType(
-                        context,
-                        'Organic Waste',
-                        'Food scraps, garden waste —\ngreat for composting!',
-                        AppImages.kOrganicWaste,
+                    InkWell(
+                      onTap: () => context.push(OrganicWasteDetails.routeName),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.kAntiFlashWhite,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: _buildPickUpType(
+                          context,
+                          'Organic Waste',
+                          'Food scraps, garden waste —\ngreat for composting!',
+                          AppImages.kOrganicWaste,
+                        ),
                       ),
                     ),
 
                     const SizedBox(height: 12),
 
                     // Electronic Waste
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kAntiFlashWhite,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: _buildPickUpType(
-                        context,
-                        'Electronic Waste',
-                        'Food scraps, garden waste —\ngreat for composting!',
-                        AppImages.kElectronicWaste,
+                    InkWell(
+                      onTap: () =>
+                          context.push(ElectronicWasteDetails.routeName),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.kAntiFlashWhite,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: _buildPickUpType(
+                          context,
+                          'Electronic Waste',
+                          'Food scraps, garden waste —\ngreat for composting!',
+                          AppImages.kElectronicWaste,
+                        ),
                       ),
                     ),
 
                     const SizedBox(height: 12),
 
                     // Medical Waste
-                    Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.kAntiFlashWhite,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: _buildPickUpType(
-                        context,
-                        'Medical Waste',
-                        'Used masks, gloves, syringes.\nMust be safely handled.',
-                        AppImages.kMedicalWaste,
+                    InkWell(
+                      onTap: () => context.push(MedicalWasteDetails.routeName),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.kAntiFlashWhite,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: _buildPickUpType(
+                          context,
+                          'Medical Waste',
+                          'Used masks, gloves, syringes.\nMust be safely handled.',
+                          AppImages.kMedicalWaste,
+                        ),
                       ),
                     ),
                   ],
