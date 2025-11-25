@@ -6,8 +6,12 @@ import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/auth/presentation/pages/signUp/sign_up.dart';
 import 'package:ecobin/features/home_page/presentation/pages/home_screen.dart';
 import 'package:ecobin/features/profile/presentation/pages/profile.dart';
+import 'package:ecobin/features/requests/presentation/pages/electronic_waste%20_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/household_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/medical_waste%20_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/organic_waste%20_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
+import 'package:ecobin/features/requests/presentation/pages/recyclables_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/requests.dart';
 import 'package:ecobin/features/splash_screens/splash_screen_logo.dart';
 import 'package:ecobin/features/splash_screens/splash_screens.dart';
@@ -78,6 +82,30 @@ final GoRouter appRouter = GoRouter(
       path: HouseholdDetails.routeName,
       name: 'householdDetails',
       builder: (context, state) => const HouseholdDetails(),
+    ),
+
+    GoRoute(
+      path: RecyclablesDetails.routeName,
+      name: 'recyclablesDetails',
+      builder: (context, state) => const RecyclablesDetails(),
+    ),
+
+    GoRoute(
+      path: OrganicWasteDetails.routeName,
+      name: 'orgOrganicWasteDetails',
+      builder: (context, state) => const OrganicWasteDetails(),
+    ),
+
+    GoRoute(
+      path: ElectronicWasteDetails.routeName,
+      name: 'electronicWasteDetails',
+      builder: (context, state) => const ElectronicWasteDetails(),
+    ),
+
+    GoRoute(
+      path: MedicalWasteDetails.routeName,
+      name: 'medicalWasteDetails',
+      builder: (context, state) => const MedicalWasteDetails(),
     ),
 
     GoRoute(
