@@ -9,9 +9,13 @@ import 'package:ecobin/features/profile/data/repositories/profile_repository_imp
 import 'package:ecobin/features/profile/domain/repositories/profile_repository.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:ecobin/features/requests/data/datasource/pickup_remote_datasource_impl.dart';
+import 'package:ecobin/features/requests/data/datasource/waste_remote_datasource_impl.dart';
+import 'package:ecobin/features/requests/data/repositories/waste_repository_impl.dart';
+import 'package:ecobin/features/requests/domain/repository/waste_type_repository.dart';
 import 'package:ecobin/features/requests/data/repositories/pickup_repositories_impl.dart';
 import 'package:ecobin/features/requests/domain/repository/pickup_repository.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
+import 'package:ecobin/features/requests/presentation/state/bloc/waste_type_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Injection {
@@ -98,5 +102,21 @@ class Injection {
 
   static PickupBloc get pickupBloc {
     return PickupBloc(repository: pickupRepository);
+  }
+
+  static WasteTypeRepository? _wasteTypeRepository;
+
+  static WasteTypeRepository get wasteTypeRepository {
+    if (_wasteTypeRepository == null) {
+      final remote = WasteRemoteDataSourceImpl(apiClient: apiClient);
+
+      _wasteTypeRepository = WasteTypeRepositoryImpl(remoteDatasource: remote);
+    }
+
+    return _wasteTypeRepository!;
+  }
+
+  static WasteTypeBloc get wasteTypeBloc {
+    return WasteTypeBloc(repository: wasteTypeRepository);
   }
 }
