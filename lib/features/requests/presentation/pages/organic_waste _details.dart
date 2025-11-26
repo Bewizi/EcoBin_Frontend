@@ -1,4 +1,3 @@
-import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_back_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
@@ -8,7 +7,6 @@ import 'package:ecobin/features/requests/presentation/state/bloc/waste_type_bloc
 import 'package:ecobin/features/requests/presentation/widgets/waste_items_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class OrganicWasteDetails extends StatefulWidget {
@@ -21,14 +19,6 @@ class OrganicWasteDetails extends StatefulWidget {
 }
 
 class _OrganicWasteDetailsState extends State<OrganicWasteDetails> {
-  final List<Map<String, String>> reasons = [
-    {'icon': AppSvgs.kShopeefoodDriver, 'text': 'Fruit and Vegetable Peels'},
-    {'icon': AppSvgs.kTissuePaper, 'text': 'Coffee Grounds and Tea Bags'},
-    {'icon': AppSvgs.kDamageMap, 'text': 'Eggshells'},
-    {'icon': AppSvgs.kClothesOutline, 'text': 'Yard Waste'},
-    {'icon': AppSvgs.kLucideHouse, 'text': 'All kind of organic waste'},
-  ];
-
   List<bool> chekedList = [];
 
   bool get isAnyChecked => chekedList.any((isChecked) => isChecked);
