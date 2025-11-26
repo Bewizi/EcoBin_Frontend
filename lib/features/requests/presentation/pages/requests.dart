@@ -67,7 +67,7 @@ class Requests extends StatelessWidget {
 
                     InkWell(
                       onTap: () => context.push(
-                        ' ${RecyclablesDetails.routeName}/recyclables',
+                        '${RecyclablesDetails.routeName}/recyclables',
                       ),
                       child: Container(
                         decoration: BoxDecoration(
