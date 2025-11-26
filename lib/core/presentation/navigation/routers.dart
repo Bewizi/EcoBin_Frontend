@@ -88,9 +88,10 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: RecyclablesDetails.routeName,
+      path: '${RecyclablesDetails.routeName}/:id',
       name: 'recyclablesDetails',
-      builder: (context, state) => const RecyclablesDetails(),
+      builder: (context, state) =>
+          RecyclablesDetails(id: state.pathParameters['id']!),
     ),
 
     GoRoute(
@@ -101,15 +102,17 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: ElectronicWasteDetails.routeName,
+      path: ' ${ElectronicWasteDetails.routeName}/:id',
       name: 'electronicWasteDetails',
-      builder: (context, state) => const ElectronicWasteDetails(),
+      builder: (context, state) =>
+          ElectronicWasteDetails(id: state.pathParameters['id']!),
     ),
 
     GoRoute(
-      path: MedicalWasteDetails.routeName,
+      path: '${MedicalWasteDetails.routeName}/:id',
       name: 'medicalWasteDetails',
-      builder: (context, state) => const MedicalWasteDetails(),
+      builder: (context, state) =>
+          MedicalWasteDetails(id: state.pathParameters['id']!),
     ),
 
     GoRoute(
