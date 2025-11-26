@@ -3,13 +3,11 @@ import 'package:flutter/material.dart';
 
 class WasteItemsSelector extends StatefulWidget {
   final List<WasteItem> items;
-  final List<IconData>? icons;
   final ValueChanged<List<int>>? onSelectionChanged;
 
   const WasteItemsSelector({
     super.key,
     required this.items,
-    this.icons,
     this.onSelectionChanged,
   });
 
@@ -54,9 +52,6 @@ class _WasteItemsSelectorState extends State<WasteItemsSelector> {
     return Column(
       children: List.generate(widget.items.length, (index) {
         final item = widget.items[index];
-        final icon = widget.icons != null && widget.icons!.length > index
-            ? widget.icons![index]
-            : Icons.delete_outline; // fallback icon
 
         return Row(
           children: [
@@ -68,9 +63,6 @@ class _WasteItemsSelectorState extends State<WasteItemsSelector> {
                 onChanged: (v) => _onChanged(index, v ?? false),
               ),
             ),
-
-            // icon (small)
-            Icon(icon, size: 18),
 
             const SizedBox(width: 8),
 
