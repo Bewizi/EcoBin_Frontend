@@ -18,7 +18,7 @@ import 'package:ecobin/features/splash_screens/splash_screens.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: SignIn.routeName,
+  initialLocation: HomeScreen.routeName,
   routes: [
     GoRoute(
       path: SplashScreenLogo.routeName,
@@ -79,9 +79,12 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: HouseholdDetails.routeName,
+      // expect an id string in the path (uuid or slug)
+      path: '${HouseholdDetails.routeName}/:id',
       name: 'householdDetails',
-      builder: (context, state) => const HouseholdDetails(),
+      // pass the captured id into the page at runtime (not const)
+      builder: (context, state) =>
+          HouseholdDetails(id: state.pathParameters['id']!),
     ),
 
     GoRoute(
@@ -91,9 +94,10 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      path: OrganicWasteDetails.routeName,
+      path: '${OrganicWasteDetails.routeName}/:id',
       name: 'orgOrganicWasteDetails',
-      builder: (context, state) => const OrganicWasteDetails(),
+      builder: (context, state) =>
+          OrganicWasteDetails(id: state.pathParameters['id']!),
     ),
 
     GoRoute(

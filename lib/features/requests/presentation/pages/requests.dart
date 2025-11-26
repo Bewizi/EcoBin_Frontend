@@ -45,7 +45,10 @@ class Requests extends StatelessWidget {
                 child: ListView(
                   children: [
                     InkWell(
-                      onTap: () => context.push(HouseholdDetails.routeName),
+                      // navigate to the household details page with a string id (slug or uuid)
+                      onTap: () => context.push(
+                        '${HouseholdDetails.routeName}/household',
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
@@ -82,7 +85,9 @@ class Requests extends StatelessWidget {
 
                     // Organic Waste
                     InkWell(
-                      onTap: () => context.push(OrganicWasteDetails.routeName),
+                      onTap: () => context.push(
+                        '${OrganicWasteDetails.routeName}/organicwaste',
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
