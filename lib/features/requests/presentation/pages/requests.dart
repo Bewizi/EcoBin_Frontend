@@ -66,7 +66,9 @@ class Requests extends StatelessWidget {
                     const SizedBox(height: 12),
 
                     InkWell(
-                      onTap: () => context.push(RecyclablesDetails.routeName),
+                      onTap: () => context.push(
+                        ' ${RecyclablesDetails.routeName}/recyclables',
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
@@ -106,8 +108,9 @@ class Requests extends StatelessWidget {
 
                     // Electronic Waste
                     InkWell(
-                      onTap: () =>
-                          context.push(ElectronicWasteDetails.routeName),
+                      onTap: () => context.push(
+                        '${ElectronicWasteDetails.routeName}/electronicwaste',
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
@@ -126,7 +129,9 @@ class Requests extends StatelessWidget {
 
                     // Medical Waste
                     InkWell(
-                      onTap: () => context.push(MedicalWasteDetails.routeName),
+                      onTap: () => context.push(
+                        '${MedicalWasteDetails.routeName}/medicalwaste',
+                      ),
                       child: Container(
                         decoration: BoxDecoration(
                           color: AppColors.kAntiFlashWhite,
