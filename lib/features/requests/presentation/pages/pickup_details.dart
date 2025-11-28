@@ -5,6 +5,7 @@ import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_input_field.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/login_bloc.dart';
+import 'package:ecobin/features/auth/presentation/state/bloc/register_bloc.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:ecobin/features/requests/presentation/widgets/mixins/successful_pickup_modal.dart';
 import 'package:flutter/material.dart';
@@ -249,10 +250,29 @@ class _PickupDetailsState extends State<PickupDetails>
                                             final authSate = context
                                                 .read<AuthBloc>()
                                                 .state;
+                                            final registerState = context
+                                                .read<RegisterBloc>()
+                                                .state;
 
                                             String? userId;
                                             if (authSate is AuthSuccess) {
                                               userId = authSate.user.id;
+                                            } else if (registerState
+                                                is RegisterSuccess) {
+                                              userId = registerState.user.id;
+                                            }
+                                            if (userId != null) {
+                                              context.read<PickupBloc>().add(
+                                                CreatePickupEvent(
+                                                  userId: userId,
+                                                  address: _address.text.trim(),
+                                                  pickupDate: _pickupDate.text,
+                                                  pickupTime: _pickupTime.text,
+                                                  additionalNote:
+                                                      _additionalNote.text
+                                                          .trim(),
+                                                ),
+                                              );
                                             } else {
                                               ScaffoldMessenger.of(
                                                 context,
