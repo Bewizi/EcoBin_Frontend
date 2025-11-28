@@ -16,7 +16,11 @@ void main() async {
 
   await Injection.init();
 
-  runApp(DevicePreview(enabled: !kReleaseMode, builder: (context) => MyApp()));
+  runApp(
+    // DevicePreview(enabled: !kReleaseMode, builder: (context) =>
+    // )
+    MyApp(),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -53,7 +57,7 @@ class MyApp extends StatelessWidget {
           ],
           child: MaterialApp.router(
             locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
+            // builder: DevicePreview.appBuilder,
             // useInheritedMediaQuery: true,
             routerConfig: appRouter,
             theme: AppThemesData.lightTheme(),
