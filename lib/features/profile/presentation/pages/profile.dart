@@ -206,12 +206,7 @@ class _ProfileState extends State<Profile> {
                                             },
                                             builder: (context, state) {
                                               return TextRegular(
-                                                (state is PickupLoaded)
-                                                    ? state
-                                                          .pickups[0]
-                                                          .pickupTime
-                                                    : '9 AM - Thursays',
-
+                                                '9 AM - Thursays',
                                                 color: AppColors.kBlack,
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w500,
