@@ -18,7 +18,7 @@ import 'package:ecobin/features/splash_screens/splash_screens.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: HomeScreen.routeName,
+  initialLocation: SplashScreenLogo.routeName,
   routes: [
     GoRoute(
       path: SplashScreenLogo.routeName,
