@@ -72,168 +72,174 @@ class _SignInState extends State<SignIn> {
           builder: (context, state) {
             final isLoading = state is AuthLoading;
 
-            return Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height * 0.20,
-                  decoration: BoxDecoration(color: AppColors.kPrimary),
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          ClipRRect(
-                            child: Image.asset(AppImages.kPaperRecycle),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50, left: 19),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextHeader(
-                                'Welcome Back!',
-                                color: AppColors.kWhite,
-                              ),
-                              const SizedBox(height: 12),
-                              TextRegular(
-                                'Fill the form below to continue.',
-                                color: AppColors.kWhite,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(20.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height * 0.20,
+                    decoration: BoxDecoration(color: AppColors.kPrimary),
+                    child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        // email field
-                        AppField(
-                          controller: _emailController,
-                          hintText: 'Ecobin@gmail.com',
-                          title: 'Email Address',
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your emaul';
-                            }
-                            if (!value.contains('@')) {
-                              return 'Invalid email address';
-                            }
-                            return null;
-                          },
-                        ),
-
-                        const SizedBox(height: 16),
-
-                        // password field
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            AppField(
-                              controller: _passwordController,
-                              hintText: 'Enter a strong password',
-                              title: 'Password',
-                              obscureText: _obscureText,
-                              suffix: PasswordVisible(
-                                isObscured: _obscureText,
-                                onToggle: _togglePasswordVisisble,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your password';
-                                }
-                                if (value.length < 8) {
-                                  return 'Password must be at least 8 characters above';
-                                }
-                                if (value.length > 20) {
-                                  return 'Password must be at most not be more 20 characters';
-                                }
-                                return null;
-                              },
+                            ClipRRect(
+                              child: Image.asset(AppImages.kPaperRecycle),
                             ),
-                            const SizedBox(height: 16),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {},
-                                child: TextRegular(
-                                  'Forgot Password?',
-                                  color: AppColors.kPrimary,
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50, left: 19),
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextHeader(
+                                  'Welcome Back!',
+                                  color: AppColors.kWhite,
                                 ),
-                              ),
+                                const SizedBox(height: 12),
+                                TextRegular(
+                                  'Fill the form below to continue.',
+                                  color: AppColors.kWhite,
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 84),
-                        // submit button
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomButton(
-                              title: 'Log In',
-                              onTap: isLoading
-                                  ? null
-                                  : () {
-                                      if (_formKey.currentState!.validate()) {
-                                        context.read<AuthBloc>().add(
-                                          LoginRequested(
-                                            email: _emailController.text.trim(),
-                                            password: _passwordController.text,
-                                          ),
-                                        );
-                                      }
-                                    },
-
-                              child: isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        color: AppColors.kWhite,
-                                        strokeWidth: 2,
-                                      ),
-                                    )
-                                  : null,
-                            ),
-
-                            const SizedBox(height: 11),
-                            Align(
-                              alignment: Alignment.center,
-                              child: AppRichText(
-                                text: 'Don\'t have an account?',
-                                color: AppColors.kPayneGray,
-                                fontSize: 14,
-                                spans: [
-                                  TextSpan(
-                                    text: ' Sign Up',
-                                    style: TextStyle(color: AppColors.kPrimary),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Navigate to SignUp
-                                        context.go(SignUp.routeName);
-                                      },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          // email field
+                          AppField(
+                            controller: _emailController,
+                            hintText: 'Ecobin@gmail.com',
+                            title: 'Email Address',
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your emaul';
+                              }
+                              if (!value.contains('@')) {
+                                return 'Invalid email address';
+                              }
+                              return null;
+                            },
+                          ),
+
+                          const SizedBox(height: 16),
+
+                          // password field
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AppField(
+                                controller: _passwordController,
+                                hintText: 'Enter a strong password',
+                                title: 'Password',
+                                obscureText: _obscureText,
+                                suffix: PasswordVisible(
+                                  isObscured: _obscureText,
+                                  onToggle: _togglePasswordVisisble,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  if (value.length < 8) {
+                                    return 'Password must be at least 8 characters above';
+                                  }
+                                  if (value.length > 20) {
+                                    return 'Password must be at most not be more 20 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child: TextRegular(
+                                    'Forgot Password?',
+                                    color: AppColors.kPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 84),
+                          // submit button
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomButton(
+                                title: 'Log In',
+                                onTap: isLoading
+                                    ? null
+                                    : () {
+                                        if (_formKey.currentState!.validate()) {
+                                          context.read<AuthBloc>().add(
+                                            LoginRequested(
+                                              email: _emailController.text
+                                                  .trim(),
+                                              password:
+                                                  _passwordController.text,
+                                            ),
+                                          );
+                                        }
+                                      },
+
+                                child: isLoading
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: AppColors.kWhite,
+                                          strokeWidth: 2,
+                                        ),
+                                      )
+                                    : null,
+                              ),
+
+                              const SizedBox(height: 11),
+                              Align(
+                                alignment: Alignment.center,
+                                child: AppRichText(
+                                  text: 'Don\'t have an account?',
+                                  color: AppColors.kPayneGray,
+                                  fontSize: 14,
+                                  spans: [
+                                    TextSpan(
+                                      text: ' Sign Up',
+                                      style: TextStyle(
+                                        color: AppColors.kPrimary,
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          // Navigate to SignUp
+                                          context.go(SignUp.routeName);
+                                        },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
