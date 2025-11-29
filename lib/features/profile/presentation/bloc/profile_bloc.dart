@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecobin/core/data/error/exception.dart';
 import 'package:ecobin/features/auth/domain/user.dart';
 import 'package:ecobin/features/profile/domain/profile.dart';

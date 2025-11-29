@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecobin/core/data/error/exception.dart';
 import 'package:ecobin/features/requests/domain/pickup.dart';
 import 'package:ecobin/features/requests/domain/repository/pickup_repository.dart';

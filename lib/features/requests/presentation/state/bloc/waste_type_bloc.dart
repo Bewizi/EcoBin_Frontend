@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ecobin/core/data/error/exception.dart';
 import 'package:ecobin/features/requests/domain/repository/waste_type_repository.dart';
 import 'package:ecobin/features/requests/domain/waste_categories.dart';
