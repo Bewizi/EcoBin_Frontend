@@ -170,32 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            SliverPadding(
-              padding: const EdgeInsets.only(top: 27, left: 20, right: 20),
-              sliver: SliverGrid.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20.0,
-                  crossAxisSpacing: 12.0,
-                  childAspectRatio: 2.5,
-                ),
-                itemBuilder: (context, index) {
-                  final action = _pickUp[index];
-                  return PickupAction(
-                    title: action['title'] as String,
-                    icon: action['icon'] as String,
-                    onTap: () {
-                      final routes = action['route'];
-                      if (routes != null) {
-                        context.push(routes);
-                      }
-                    },
-                  );
-                },
-                itemCount: 4,
-              ),
-            ),
-
             SliverToBoxAdapter(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 25),
@@ -375,6 +349,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
+              ),
+            ),
+
+            SliverPadding(
+              padding: const EdgeInsets.only(top: 27, left: 20, right: 20),
+              sliver: SliverGrid.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 20.0,
+                  crossAxisSpacing: 12.0,
+                  childAspectRatio: 2.5,
+                ),
+                itemBuilder: (context, index) {
+                  final action = _pickUp[index];
+                  return PickupAction(
+                    title: action['title'] as String,
+                    icon: action['icon'] as String,
+                    onTap: () {
+                      final routes = action['route'];
+                      if (routes != null) {
+                        context.push(routes);
+                      }
+                    },
+                  );
+                },
+                itemCount: 4,
               ),
             ),
           ],
