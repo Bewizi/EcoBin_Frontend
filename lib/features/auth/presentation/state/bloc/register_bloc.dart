@@ -49,7 +49,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     RegisterRequested event,
     Emitter<RegisterState> emit,
   ) async {
-    print('🔵 [RegisterBLoC] Registration started...');
+    // print('🔵 [RegisterBLoC] Registration started...');
     emit(RegisterLoading());
 
     try {
@@ -60,16 +60,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: event.password,
       );
 
-      print('🟢 [RegisterBLoC] Registration successful: ${user.fullName}');
+      // print('🟢 [RegisterBLoC] Registration successful: ${user.fullName}');
       emit(RegisterSuccess(user));
     } on ServerException catch (e) {
-      print('🔴 [RegisterBLoC] Server error: ${e.message}');
+      // print('🔴 [RegisterBLoC] Server error: ${e.message}');
       emit(RegisterFailure(e.message));
     } on NetworkException catch (e) {
-      print('🔴 [RegisterBLoC] Network error: ${e.message}');
+      // print('🔴 [RegisterBLoC] Network error: ${e.message}');
       emit(RegisterFailure(e.message));
     } catch (e) {
-      print('🔴 [RegisterBLoC] Unexpected error: $e');
+      // print('🔴 [RegisterBLoC] Unexpected error: $e');
       emit(RegisterFailure('Registration failed. Please try again.'));
     }
   }

@@ -15,7 +15,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
     String? pickupLocation,
   }) async {
     try {
-      print('🔵 [ProfileDataSource] Updating profile...');
+      // print('🔵 [ProfileDataSource] Updating profile...');
 
       final Map<String, dynamic> data = {};
 
@@ -24,13 +24,13 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
       if (pickupLocation != null) data['pickupLocation'] = pickupLocation;
       if (fullName != null) data['fullName'] = fullName;
 
-      print('🟢 [ProfileDataSource] Profile updated successfully');
+      // print('🟢 [ProfileDataSource] Profile updated successfully');
 
       final response = await apiClient.post('profile', data: data);
 
       return ProfileModel.fromJson(response.data['user']);
     } catch (e) {
-      print('🔴 [ProfileDataSource] Update failed: $e');
+      // print('🔴 [ProfileDataSource] Update failed: $e');
       rethrow;
     }
   }
