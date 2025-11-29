@@ -1,4 +1,4 @@
-import 'package:device_preview/device_preview.dart';
+// import 'package:device_preview/device_preview.dart';
 import 'package:ecobin/core/di/injection.dart';
 import 'package:ecobin/core/presentation/navigation/routers.dart';
 import 'package:ecobin/core/presentation/themes/themes_data.dart';
@@ -6,7 +6,7 @@ import 'package:ecobin/features/auth/presentation/state/bloc/register_bloc.dart'
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/waste_type_bloc.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
