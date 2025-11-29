@@ -12,12 +12,22 @@ class LoginRequested extends AuthEvent {
   LoginRequested({required this.email, required this.password});
 }
 
+class CheckAuthStatus extends AuthEvent {}
+
 // states
 abstract class AuthSate {}
 
 class AuthInitial extends AuthSate {}
 
 class AuthLoading extends AuthSate {}
+
+// class AuthAuthenticated extends AuthSate {
+//   final User user;
+//   AuthAuthenticated(this.user);
+
+// }
+
+// class AuthUnauthenticated extends AuthSate {}
 
 class AuthSuccess extends AuthSate {
   final User user;
@@ -35,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthSate> {
 
   AuthBloc({required this.repository}) : super(AuthInitial()) {
     on<LoginRequested>(_onLoginRequested);
+    on<CheckAuthStatus>(_onCheckAuthStatus);
   }
 
   Future<void> _onLoginRequested(
@@ -54,6 +65,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthSate> {
     } on NetworkException catch (e) {
       emit(AuthFailure(e.message));
     } catch (e) {
+      emit(AuthFailure('An unexpected error occurred'));
+    }
+  }
+
+  Future<void> _onCheckAuthStatus(
+    CheckAuthStatus event,
+    Emitter<AuthSate> emit,
+  ) async {
+    emit(AuthLoading());
+
+    try {
+      final user = await repository.getCurrentUser();
+
+      emit(AuthSuccess(user));
+    } on ServerException catch (e) {
+      emit(AuthFailure(e.message));
+    } on NetworkException catch (e) {
+      emit(AuthFailure(e.message));
+    } catch (e) {
+      emit(AuthInitial());
       emit(AuthFailure('An unexpected error occurred'));
     }
   }
