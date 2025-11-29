@@ -26,7 +26,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
 
       print('🟢 [ProfileDataSource] Profile updated successfully');
 
-      final response = await apiClient.post('/profile', data: data);
+      final response = await apiClient.post('profile', data: data);
 
       return ProfileModel.fromJson(response.data['user']);
     } catch (e) {
@@ -38,7 +38,7 @@ class ProfileRemoteDatasourceImpl implements ProfileRemoteDatasource {
   @override
   Future<ProfileModel> getProfile() async {
     try {
-      final response = await apiClient.get('/profile');
+      final response = await apiClient.get('profile');
       return ProfileModel.fromJson(response.data['user']);
     } catch (e) {
       rethrow;

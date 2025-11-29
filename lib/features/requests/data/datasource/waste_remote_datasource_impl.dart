@@ -11,7 +11,7 @@ class WasteRemoteDataSourceImpl implements WasteRemoteDatasource {
   Future<List<WasteCategoryModel>> getWasteTypes() async {
     try {
       // backend returns { data: [ ...categories ] }
-      final response = await apiClient.get('/waste-categories');
+      final response = await apiClient.get('waste-categories');
 
       final List<dynamic> list = response.data['data'] as List<dynamic>;
 
@@ -27,7 +27,7 @@ class WasteRemoteDataSourceImpl implements WasteRemoteDatasource {
   Future<WasteCategoryModel> getWasteCategoryById(String id) async {
     try {
       // backend returns { data: { ...category } }
-      final response = await apiClient.get('/waste-categories/$id');
+      final response = await apiClient.get('waste-categories/$id');
 
       final Map<String, dynamic> data =
           response.data['data'] as Map<String, dynamic>;

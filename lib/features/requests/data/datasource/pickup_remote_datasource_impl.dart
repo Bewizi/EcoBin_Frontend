@@ -17,7 +17,7 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
   }) async {
     try {
       final response = await apiClient.post(
-        '/pickups',
+        'pickups',
         data: {
           'userId': userId,
           'address': address,
@@ -40,7 +40,7 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
   @override
   Future<List<PickupModel>> getPickup() async {
     try {
-      final response = await apiClient.get('/pickups');
+      final response = await apiClient.get('pickups');
 
       final List<dynamic> data = response.data['pickups'];
 
@@ -53,7 +53,7 @@ class PickupRemoteDataSourceImpl implements PickupRemoteDatasource {
   @override
   Future<PickupModel> getPickupById(String id) async {
     try {
-      final response = await apiClient.get('/pickups/$id');
+      final response = await apiClient.get('pickups/$id');
       return PickupModel.fromJson(response.data);
     } catch (e) {
       rethrow;
