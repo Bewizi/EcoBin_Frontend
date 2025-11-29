@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:ecobin/core/data/error/exception.dart';
 import 'package:ecobin/core/data/services/api_client.dart';
 import 'package:ecobin/features/auth/data/data_sources/auth_remote_datasource.dart';
+import 'package:ecobin/features/auth/data/models/user_model.dart';
 import 'package:ecobin/features/auth/domain/auth_repository.dart';
 import 'package:ecobin/features/auth/domain/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,9 +57,34 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<User> getCurrentUser() {
-    // TODO: implement getCurrentUser
-    throw UnimplementedError();
+  Future<User> getCurrentUser() async {
+    try {
+      final token = sharedPreferences.getString('auth_token');
+
+      if (token == null) {
+        throw Exception('No token found');
+      }
+
+      apiClient.setToken(token);
+
+      final response = await apiClient.get('/user');
+      return UserModel.fromJson(response.data);
+    } on DioException catch (e) {
+      // 🛑 FIX: Only logout if the server says "Unauthenticated" (401)
+      if (e.response?.statusCode == 401) {
+        await sharedPreferences.remove('auth_token');
+        apiClient.clearToken();
+        throw ServerException('Session expired');
+      }
+      // If it's a network error (server down, no wifi),
+      // we should probably let them stay (or handle it differently).
+      // For now, rethrow so the BLoC knows it failed, but maybe don't delete the token.
+      throw NetworkException('Network error: ${e.message}');
+    } catch (e) {
+      // Only clear token for generic errors if you are strict
+      // await sharedPreferences.remove('auth_token');
+      rethrow;
+    }
   }
 
   @override
