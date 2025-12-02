@@ -5,6 +5,7 @@ import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
 import 'package:ecobin/features/auth/presentation/pages/signIn/sign_in.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
 import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:ecobin/features/profile/presentation/widgets/user_avatar.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,65 +67,8 @@ class _ProfileState extends State<Profile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // profile.dart - Update the avatar section
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child:
-                                (state is ProfileLoaded &&
-                                    state.user.avatar != null)
-                                ? Image.network(
-                                    state.user.avatar!,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      // Fallback if image fails to load
-                                      return Container(
-                                        width: 100,
-                                        height: 100,
-                                        color: AppColors.kAntiFlashWhite,
-                                        child: Icon(
-                                          Icons.person,
-                                          size: 50,
-                                          color: AppColors.kPayneGray,
-                                        ),
-                                      );
-                                    },
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        width: 100,
-                                        height: 100,
-                                        color: AppColors.kAntiFlashWhite,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            value:
-                                                loadingProgress
-                                                        .expectedTotalBytes !=
-                                                    null
-                                                ? loadingProgress
-                                                          .cumulativeBytesLoaded /
-                                                      loadingProgress
-                                                          .expectedTotalBytes!
-                                                : null,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  )
-                                : Container(
-                                    width: 100,
-                                    height: 100,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.kAntiFlashWhite,
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 50,
-                                      color: AppColors.kPayneGray,
-                                    ),
-                                  ),
-                          ),
+                          const UserAvatar(size: 100, iconSize: 50),
+
                           SizedBox(width: 20),
                           Expanded(
                             child: Column(
