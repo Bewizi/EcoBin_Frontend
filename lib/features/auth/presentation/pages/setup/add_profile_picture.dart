@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:ecobin/core/di/injection.dart';
 import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
@@ -6,6 +10,7 @@ import 'package:ecobin/features/auth/presentation/pages/setup/user_type_options.
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddProfilePicture extends StatefulWidget {
   const AddProfilePicture({super.key});
@@ -17,6 +22,66 @@ class AddProfilePicture extends StatefulWidget {
 }
 
 class _AddProfilePictureState extends State<AddProfilePicture> {
+  File? _imageFile;
+  final ImagePicker picker = ImagePicker();
+  bool _isUpLoading = false;
+
+  Future<void> _uploadProfilePicture() async {
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+      });
+    }
+  }
+
+  Future<void> _uploadImage() async {
+    if (_imageFile == null) return;
+    setState(() {
+      _isUpLoading = true;
+    });
+
+    try {
+      String fileName = _imageFile!.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        "avatar": await MultipartFile.fromFile(
+          _imageFile!.path,
+          filename: fileName,
+        ),
+      });
+
+      final response = await Injection.apiClient.post(
+        'profile/avatar',
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        // Successfully uploaded
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Profile picture uploaded successfully'),
+            ),
+          );
+          context.push(UserTypeOptions.routeName);
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to upload profile picture: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isUpLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,21 +117,48 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                       fontSize: 12,
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+
+                    // profile picture upload area
                     Center(
-                      child: Container(
-                        padding: EdgeInsets.all(25),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.kAntiFlashWhite,
-                        ),
-                        child: SvgPicture.asset(
-                          AppSvgs.kUserIcon,
-                          width: 40,
-                          height: 40,
-                          fit: BoxFit.scaleDown,
+                      child: GestureDetector(
+                        onTap: _uploadProfilePicture,
+                        child: Container(
+                          padding: _imageFile == null
+                              ? EdgeInsets.all(25)
+                              : EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.kAntiFlashWhite,
+                            image: _imageFile != null
+                                ? DecorationImage(
+                                    image: FileImage(_imageFile!),
+                                    fit: BoxFit.cover,
+                                  )
+                                : null,
+                          ),
+                          child: _imageFile == null
+                              ? SvgPicture.asset(
+                                  AppSvgs.kUserIcon,
+                                  width: 40,
+                                  height: 40,
+                                  fit: BoxFit.scaleDown,
+                                )
+                              : null,
                         ),
                       ),
                     ),
+
+                    if (_imageFile != null)
+                      Center(
+                        child: TextButton(
+                          onPressed: _uploadProfilePicture,
+                          child: TextRegular(
+                            'Change Photo',
+                            fontSize: 14,
+                            color: AppColors.kPayneGray,
+                          ),
+                        ),
+                      ),
 
                     SizedBox(height: MediaQuery.of(context).size.height * 0.2),
                     Column(
@@ -80,10 +172,27 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                           },
                         ),
                         const SizedBox(height: 16),
-                        OutlinedCustomButton(
-                          title: 'Upload Photo',
+
+                        // upload photo button
+                        CustomButton(
+                          title: _isUpLoading ? 'Uploading...' : 'Upload Photo',
                           bgColor: AppColors.kPrimary,
                           textColor: AppColors.kWhite,
+                          onTap: _isUpLoading
+                              ? null
+                              : (_imageFile == null
+                                    ? _uploadProfilePicture
+                                    : _uploadImage),
+                          child: _isUpLoading
+                              ? SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    color: AppColors.kWhite,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : null,
                         ),
                         const SizedBox(height: 16),
                         Container(

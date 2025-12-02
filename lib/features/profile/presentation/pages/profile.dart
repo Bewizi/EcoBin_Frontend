@@ -65,14 +65,65 @@ class _ProfileState extends State<Profile> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          // profile.dart - Update the avatar section
                           ClipRRect(
                             borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              'https://images.unsplash.com/photo-1540569014015-19a7be504e3a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=735',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
+                            child:
+                                (state is ProfileLoaded &&
+                                    state.user.avatar != null)
+                                ? Image.network(
+                                    state.user.avatar!,
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      // Fallback if image fails to load
+                                      return Container(
+                                        width: 100,
+                                        height: 100,
+                                        color: AppColors.kAntiFlashWhite,
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 50,
+                                          color: AppColors.kPayneGray,
+                                        ),
+                                      );
+                                    },
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        width: 100,
+                                        height: 100,
+                                        color: AppColors.kAntiFlashWhite,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            value:
+                                                loadingProgress
+                                                        .expectedTotalBytes !=
+                                                    null
+                                                ? loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      loadingProgress
+                                                          .expectedTotalBytes!
+                                                : null,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  )
+                                : Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.kAntiFlashWhite,
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 50,
+                                      color: AppColors.kPayneGray,
+                                    ),
+                                  ),
                           ),
                           SizedBox(width: 20),
                           Expanded(
