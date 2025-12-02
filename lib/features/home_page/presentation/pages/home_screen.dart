@@ -7,7 +7,7 @@ import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/schedule_pickup_info.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
-import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:ecobin/features/profile/presentation/widgets/user_avatar.dart';
 import 'package:ecobin/features/requests/domain/pickup.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
 import 'package:ecobin/features/requests/presentation/pages/requests.dart';
@@ -97,51 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   const Spacer(),
-                  Row(
-                    children: [
-                      BlocBuilder<ProfileBloc, ProfileState>(
-                        builder: (context, state) {
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child:
-                                (state is ProfileLoaded &&
-                                    state.user.avatar != null)
-                                ? Image.network(
-                                    state.user.avatar!,
-                                    width: 40,
-                                    height: 40,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            Container(
-                                              width: 40,
-                                              height: 40,
-                                              color: AppColors.kAntiFlashWhite,
-                                              child: Icon(
-                                                Icons.person,
-                                                size: 20,
-                                                color: AppColors.kPayneGray,
-                                              ),
-                                            ),
-                                  )
-                                : Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.kAntiFlashWhite,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 20,
-                                      color: AppColors.kPayneGray,
-                                    ),
-                                  ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                  Row(children: [const UserAvatar(size: 80, iconSize: 20)]),
                 ],
               ),
             ),
