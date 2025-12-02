@@ -100,8 +100,10 @@ class _SignUpState extends State<SignUp> with SuccessMessageBottomSheet {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            ClipRRect(
-                              child: Image.asset(AppImages.kPaperRecycle),
+                            Expanded(
+                              child: ClipRRect(
+                                child: Image.asset(AppImages.kPaperRecycle),
+                              ),
                             ),
                           ],
                         ),
