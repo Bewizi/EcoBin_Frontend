@@ -7,6 +7,7 @@ import 'package:ecobin/features/home_page/presentation/widgets/date_card.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/pickup_action.dart';
 import 'package:ecobin/features/home_page/presentation/widgets/schedule_pickup_info.dart';
 import 'package:ecobin/features/navigation/page_navigation_bar.dart';
+import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:ecobin/features/profile/presentation/widgets/user_avatar.dart';
 import 'package:ecobin/features/requests/domain/pickup.dart';
 import 'package:ecobin/features/requests/presentation/pages/pickup_details.dart';
@@ -62,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<PickupBloc>().add(const GetPickupEvent());
+    context.read<ProfileBloc>().add(const GetUserEvent());
   }
 
   @override
@@ -73,19 +75,39 @@ class _HomeScreenState extends State<HomeScreen> {
           slivers: [
             SliverAppBar(
               pinned: true,
-              toolbarHeight: 80,
+              toolbarHeight: 100,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextHeader(
-                        getGreeting(),
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.kBlack,
+                      BlocBuilder<ProfileBloc, ProfileState>(
+                        builder: (context, state) {
+                          String greeting = getGreeting();
+
+                          if (state is ProfileLoaded &&
+                              state.user.fullName != null) {
+                            final fullName = state.user.fullName!
+                                .split(' ')
+                                .first;
+                            return TextHeader(
+                              '$greeting, $fullName',
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.kBlack,
+                            );
+                          }
+
+                          return TextHeader(
+                            '{$greeting}',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                            color: AppColors.kBlack,
+                          );
+                        },
                       ),
+
                       const SizedBox(height: 8),
                       TextRegular(
                         'It’s sunny 🌞️, perfect day to take\nout your bin!',
