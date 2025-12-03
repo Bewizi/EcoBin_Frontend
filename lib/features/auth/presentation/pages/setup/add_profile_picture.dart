@@ -125,7 +125,7 @@ class _AddProfilePictureState extends State<AddProfilePicture> {
                         child: Container(
                           padding: _imageFile == null
                               ? EdgeInsets.all(25)
-                              : EdgeInsets.zero,
+                              : EdgeInsets.all(150),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: AppColors.kAntiFlashWhite,
