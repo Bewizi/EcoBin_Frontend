@@ -18,7 +18,7 @@ class ProfileModel extends Profile {
       if (avatarPath.startsWith('http')) {
         avatarUrl = avatarPath;
       } else {
-        avatarUrl = 'https://668ade0794ad.ngrok-free.app/storage/$avatarPath';
+        avatarUrl = 'https://0852a2e04457.ngrok-free.app/storage/$avatarPath';
       }
     }
 
