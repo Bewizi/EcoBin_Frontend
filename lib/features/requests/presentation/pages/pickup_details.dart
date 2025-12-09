@@ -1,12 +1,16 @@
+import 'package:ecobin/core/di/injection.dart';
 import 'package:ecobin/core/presentation/constants/svgs.dart';
 import 'package:ecobin/core/presentation/themes/colors.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_back_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_button.dart';
 import 'package:ecobin/core/presentation/ui/widgets/app_input_field.dart';
 import 'package:ecobin/core/presentation/ui/widgets/text_styles.dart';
+import 'package:ecobin/core/services/location_service.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/login_bloc.dart';
 import 'package:ecobin/features/auth/presentation/state/bloc/register_bloc.dart';
+import 'package:ecobin/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:ecobin/features/requests/presentation/state/bloc/pickup_bloc.dart';
+import 'package:ecobin/features/requests/presentation/widgets/change_location.dart';
 import 'package:ecobin/features/requests/presentation/widgets/mixins/successful_pickup_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -33,6 +37,26 @@ class _PickupDetailsState extends State<PickupDetails>
 
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  bool _isLoadingLocation = false;
+  double? _latitude;
+  double? _longitude;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserLocation();
+  }
+
+  void _loadUserLocation() async {
+    final profileState = context.read<ProfileBloc>().state;
+    if (profileState is ProfileLoaded) {
+      if (profileState.user.pickupLocation != null) {
+        _address.text = profileState.user.pickupLocation!;
+      }
+    } else {
+      context.read<ProfileBloc>().add(const GetUserEvent());
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -44,7 +68,7 @@ class _PickupDetailsState extends State<PickupDetails>
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        _pickupDate.text = DateFormat('yyy-MM-dd').format(picked);
+        _pickupDate.text = DateFormat('yyyy-MM-dd').format(picked);
       });
     }
   }
@@ -62,6 +86,145 @@ class _PickupDetailsState extends State<PickupDetails>
         final minute = picked.minute.toString().padLeft(2, '0');
         _pickupTime.text = '$hour:$minute';
       });
+    }
+  }
+
+  void _showChangeLocationBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => ChangeLocation(
+        addressController: _address,
+        onGetCurrentLocation: _getCurrentLocation,
+        onUseSavedLocation: (loc) {
+          setState(() => _address.text = loc);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: TextRegular(
+                'Saved location loaded',
+                color: AppColors.kWhite,
+              ),
+              backgroundColor: AppColors.kPrimary,
+            ),
+          );
+        },
+        onEnterManualAddress: () async {
+          return await _showManualAddressDialog();
+        },
+      ),
+    );
+  }
+
+  Future<String?> _showManualAddressDialog() async {
+    final controller = TextEditingController(text: _address.text);
+
+    return await showDialog<String>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: TextHeader("Enter Address"),
+        content: AppField(
+          hintText: 'Enter your pickup address',
+          controller: controller,
+          maxLines: 3,
+          minLines: 3,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: TextRegular("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context, controller.text.trim());
+            },
+            child: TextRegular("Confirm"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _getCurrentLocation() async {
+    setState(() {
+      _isLoadingLocation = true;
+    });
+
+    try {
+      final position = await Injection.locationService.getCurrentPosition();
+
+      _latitude = position.latitude;
+      _longitude = position.longitude;
+
+      final result = await Injection.geocodingService.reverseGeocode(
+        latitude: position.latitude,
+        longitude: position.longitude,
+      );
+
+      if (result != null) {
+        setState(() {
+          _address.text = result.address;
+        });
+
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: TextRegular(
+                'Current location loaded successfully!',
+                color: AppColors.kWhite,
+              ),
+              backgroundColor: AppColors.kPrimary,
+            ),
+          );
+        }
+      }
+    }
+    // on LocationServiceDisabledException catch (e) {
+    //   _showLocationDialog(
+    //     title: 'Location Services Disabled',
+    //     message: e.toString(),
+    //     actionText: 'Open Settings',
+    //     onAction: () async {
+    //       await Injection.locationService.openLocationSettings();
+    //     },
+    //   );
+    // } on LocationPermissionDeniedException catch (e) {
+    //   _showLocationDialog(
+    //     title: 'Permission Denied',
+    //     message: e.toString(),
+    //     actionText: 'Request Again',
+    //     onAction: _getCurrentLocation,
+    //   );
+    // } on LocationPermissionDeniedForeverException catch (e) {
+    //   _showLocationDialog(
+    //     title: 'Permission Denied',
+    //     message: e.toString(),
+    //     actionText: 'Open App Settings',
+    //     onAction: () async {
+    //       await Injection.locationService.openAppSettings();
+    //     },
+    //   );
+    // }
+    catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: TextRegular(
+              'Failed to get location: ${e.toString()}',
+              color: AppColors.kWhite,
+            ),
+            backgroundColor: AppColors.kError500,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingLocation = false;
+        });
+      }
     }
   }
 
@@ -139,31 +302,64 @@ class _PickupDetailsState extends State<PickupDetails>
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                AppField(
-                                  hintText:
-                                      '03, Adekunmi Estate, Ojota Lago... ',
-                                  title: 'Pickup Address',
-                                  controller: _address,
-                                  prefixIcons: SvgPicture.asset(
-                                    AppSvgs.kGPS,
-                                    width: 20,
-                                    height: 20,
-                                    fit: BoxFit.scaleDown,
+                                BlocListener<ProfileBloc, ProfileState>(
+                                  listener: (context, profileState) {
+                                    if (profileState is ProfileLoaded &&
+                                        _address.text.isEmpty) {
+                                      if (profileState.user.pickupLocation !=
+                                          null) {
+                                        _address.text =
+                                            profileState.user.pickupLocation!;
+                                      }
+                                    }
+                                  },
+                                  child: AppField(
+                                    hintText:
+                                        '03, Adekunmi Estate, Ojota Lago... ',
+                                    title: 'Pickup Address',
+                                    controller: _address,
+                                    prefixIcons: SvgPicture.asset(
+                                      AppSvgs.kGPS,
+                                      width: 20,
+                                      height: 20,
+                                      fit: BoxFit.scaleDown,
+                                    ),
+                                    readOnly: true,
+                                    onTap: _showChangeLocationBottomSheet,
                                   ),
                                 ),
                                 SizedBox(height: 12),
                                 InkWell(
-                                  child: TextRegular(
-                                    'Change Location',
-                                    color: AppColors.kPrimary,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      decorationColor: AppColors.kPrimary,
-                                    ),
+                                  onTap: _showChangeLocationBottomSheet,
+                                  child: Row(
+                                    children: [
+                                      if (_isLoadingLocation)
+                                        const SizedBox(
+                                          width: 12,
+                                          height: 12,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: AppColors.kPrimary,
+                                          ),
+                                        ),
+
+                                      if (_isLoadingLocation)
+                                        const SizedBox(width: 8),
+
+                                      TextRegular(
+                                        _isLoadingLocation
+                                            ? 'Loading...'
+                                            : 'Change Location',
+                                        color: AppColors.kPrimary,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        style: TextStyle(
+                                          decoration: TextDecoration.underline,
+                                          decorationColor: AppColors.kPrimary,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  onTap: () {},
                                 ),
                               ],
                             ),
@@ -286,18 +482,18 @@ class _PickupDetailsState extends State<PickupDetails>
                                               return;
                                             }
 
-                                            context.read<PickupBloc>().add(
-                                              CreatePickupEvent(
-                                                userId: userId,
-                                                address: _address.text.trim(),
-                                                pickupDate: _pickupDate.text,
-                                                pickupTime: _pickupTime.text,
+                                            // context.read<PickupBloc>().add(
+                                            //   CreatePickupEvent(
+                                            //     userId: userId,
+                                            //     address: _address.text.trim(),
+                                            //     pickupDate: _pickupDate.text,
+                                            //     pickupTime: _pickupTime.text,
 
-                                                additionalNote: _additionalNote
-                                                    .text
-                                                    .trim(),
-                                              ),
-                                            );
+                                            //     additionalNote: _additionalNote
+                                            //         .text
+                                            //         .trim(),
+                                            //   ),
+                                            // );
                                           }
                                         },
                                   textColor: AppColors.kWhite,
