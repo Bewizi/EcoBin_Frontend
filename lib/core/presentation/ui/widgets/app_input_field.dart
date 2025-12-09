@@ -20,6 +20,7 @@ class AppField extends StatelessWidget {
     this.onChanged,
     this.readOnly = false,
     this.onTap,
+    this.enabled = true,
   });
 
   final String hintText;
@@ -37,6 +38,7 @@ class AppField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
   final bool readOnly;
   final VoidCallback? onTap;
+  final bool enabled;
 
   Widget _buildTextFormField(BuildContext context) {
     return TextFormField(
@@ -75,6 +77,7 @@ class AppField extends StatelessWidget {
         suffixIcon: suffix,
         prefixIcon: prefixIcons,
         contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        enabled: enabled,
       ),
     );
   }
