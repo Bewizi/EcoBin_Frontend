@@ -29,6 +29,61 @@ class _ProfileState extends State<Profile> {
     context.read<ProfileBloc>().add(const GetUserEvent());
   }
 
+  void _showLocationDetails(BuildContext context, String? location) {
+    if (location == null || location.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No location set'),
+          backgroundColor: AppColors.kError500,
+        ),
+      );
+      return;
+    }
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.location_on, color: AppColors.kPrimary, size: 24),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextHeader(
+                    'Your Location',
+                    fontSize: 18,
+                    color: AppColors.kBlack,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.kAliceBlue,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: TextRegular(
+                location,
+                fontSize: 14,
+                color: AppColors.kBlack,
+              ),
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,32 +140,53 @@ class _ProfileState extends State<Profile> {
 
                                 SizedBox(height: 12),
                                 // location
-                                Row(
-                                  children: [
-                                    SvgPicture.asset(
-                                      AppSvgs.kLocationIcon,
-                                      width: 20,
-                                      height: 20,
-                                      fit: BoxFit.scaleDown,
-                                    ),
-                                    SizedBox(width: 8),
-                                    Expanded(
-                                      child: TextRegular(
-                                        (state is ProfileLoaded)
-                                            ? state.user.pickupLocation
-                                            : 'Ibadan, Nigeria',
-                                        color: AppColors.kBlack,
-                                        fontWeight: FontWeight.w500,
+                                GestureDetector(
+                                  onTap: () {
+                                    if (state is ProfileLoaded) {
+                                      _showLocationDetails(
+                                        context,
+                                        state.user.pickupLocation,
+                                      );
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      SvgPicture.asset(
+                                        AppSvgs.kLocationIcon,
+                                        width: 20,
+                                        height: 20,
+                                        fit: BoxFit.scaleDown,
                                       ),
-                                    ),
-                                  ],
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: TextRegular(
+                                          (state is ProfileLoaded &&
+                                                  state.user.pickupLocation !=
+                                                      null)
+                                              ? _truncateLocation(
+                                                  state.user.pickupLocation!,
+                                                )
+                                              : 'No location set',
+                                          color: AppColors.kBlack,
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      if (state is ProfileLoaded &&
+                                          state.user.pickupLocation != null)
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 12,
+                                          color: AppColors.kPayneGray,
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                         ],
                       ),
-
                       SizedBox(height: 20),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +228,13 @@ class _ProfileState extends State<Profile> {
                                           const SizedBox(width: 8),
                                           Expanded(
                                             child: TextRegular(
-                                              '10 block, Majek Estate, Ibafo. Lagos state Nigeria',
+                                              (state is ProfileLoaded &&
+                                                      state
+                                                              .user
+                                                              .pickupLocation !=
+                                                          null)
+                                                  ? state.user.pickupLocation!
+                                                  : '10 block, Majek Estate, Ibafo. Lagos state Nigeria',
                                               fontSize: 16,
                                               color: AppColors.kBlack,
                                               fontWeight: FontWeight.w500,
@@ -315,6 +397,11 @@ class _ProfileState extends State<Profile> {
         ),
       ),
     );
+  }
+
+  String _truncateLocation(String location) {
+    if (location.length <= 40) return location;
+    return '${location.substring(0, 37)}...';
   }
 }
 
