@@ -1,4 +1,6 @@
 import 'package:ecobin/core/data/services/api_client.dart';
+import 'package:ecobin/core/services/geocoding_service.dart';
+import 'package:ecobin/core/services/location_service.dart';
 import 'package:ecobin/features/auth/data/data_sources/auth_remote_datasource_impl.dart';
 import 'package:ecobin/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:ecobin/features/auth/domain/auth_repository.dart';
@@ -118,5 +120,17 @@ class Injection {
 
   static WasteTypeBloc get wasteTypeBloc {
     return WasteTypeBloc(repository: wasteTypeRepository);
+  }
+
+  static LocationService? _locationService;
+  static LocationService get locationService {
+    _locationService ??= LocationService();
+    return _locationService!;
+  }
+
+  static GeocodingService? _geocodingService;
+  static GeocodingService get geocodingService {
+    _geocodingService ??= GeocodingService(apiClient: apiClient);
+    return _geocodingService!;
   }
 }
